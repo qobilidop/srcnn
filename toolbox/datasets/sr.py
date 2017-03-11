@@ -8,14 +8,15 @@ from keras.preprocessing.image import list_pictures
 from scipy.misc import imresize
 
 
-def load_data(train_dir='Train', test_dir='Test/Set5'):
-    x_train, y_train = generate(train_dir)
-    x_test, y_test = generate(test_dir, save_path='test.h5', stride=21)
+def load_data(train_dir='Train', test_dir='Test/Set5', channel=0):
+    x_train, y_train = generate(train_dir, channel=channel)
+    x_test, y_test = generate(test_dir, save_path='test.h5', stride=21,
+                              channel=channel)
     return (x_train, y_train), (x_test, y_test)
 
 
 def generate(directory, save_path='train.h5', size_input=33, size_label=21,
-             scale=3, stride=14):
+             scale=3, stride=14, channel=0):
     # settings
     directory = os.path.join(os.path.dirname(__file__),
                              '../../data', directory)
@@ -31,13 +32,12 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
     for path in filepaths:
         image = load_img(path)
         image = image.convert('YCbCr')
-        image = img_to_array(image)[:, :, 1]
+        image = img_to_array(image)
 
         im_label = modcrop(image, scale)
-        hei, wid = im_label.shape
-        size = np.array(im_label.shape)
-        im_input = imresize(imresize(im_label, size // scale, 'bicubic'),
-                            size, 'bicubic')
+        hei, wid = im_label.shape[:2]
+        im_input = imresize(imresize(im_label, 1 / scale, 'bicubic'),
+                            (hei, wid), 'bicubic')
 
         for x in range(0, hei - size_input, stride):
             for y in range(0, wid - size_input, stride):
@@ -55,7 +55,11 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
         f.create_dataset('dat', data=data)
         f.create_dataset('lab', data=label)
 
-    return data, label
+    if channel == 'all':
+        return data, label
+    else:
+        return data[:, :, :, channel:channel + 1], \
+               label[:, :, :, channel:channel + 1]
 
 
 def modcrop(image, scale):
