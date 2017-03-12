@@ -39,8 +39,8 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
         im_input = imresize(imresize(im_label, 1 / scale, 'bicubic'),
                             (hei, wid), 'bicubic')
 
-        for x in range(0, hei - size_input, stride):
-            for y in range(0, wid - size_input, stride):
+        for x in range(0, hei - size_input + 1, stride):
+            for y in range(0, wid - size_input + 1, stride):
                 subim_input = im_input[x: x + size_input, y: y + size_input]
                 subim_label = im_label[x + padding: x + padding + size_label,
                               y + padding: y + padding + size_label]
