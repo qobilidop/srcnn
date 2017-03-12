@@ -18,4 +18,7 @@ pip install -e .
 * [Jiacong Li](https://github.com/jiacong1990)
 * [Liyang Xiong](https://github.com/xiongliyang219)
 
-## [References](https://github.com/qobilidop/srcnn/wiki/References)
+## See Also
+
+* [References](https://github.com/qobilidop/srcnn/wiki/References)
+* Various other [repositories on GitHub](https://github.com/search?utf8=%E2%9C%93&q=srcnn)
