@@ -1,11 +1,11 @@
-import os
-
 import h5py
 import numpy as np
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import list_pictures
 from scipy.misc import imresize
+
+from toolbox.paths import data_dir
 
 
 def load_data(train_dir='Train', test_dir='Test/Set5', channel=0):
@@ -18,8 +18,7 @@ def load_data(train_dir='Train', test_dir='Test/Set5', channel=0):
 def generate(directory, save_path='train.h5', size_input=33, size_label=21,
              scale=3, stride=14, channel=0):
     # settings
-    directory = os.path.join(os.path.dirname(__file__),
-                             '../../data', directory)
+    directory = data_dir / directory
 
     # initialization
     data = []
@@ -27,7 +26,7 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
     padding = abs(size_input - size_label) // 2
 
     # generate data
-    filepaths = list_pictures(directory, ext='bmp')
+    filepaths = list_pictures(str(directory), ext='bmp')
 
     for path in filepaths:
         image = load_img(path)
