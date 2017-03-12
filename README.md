@@ -10,6 +10,10 @@ Reusable general codes are kept in the `toolbox` Python package. To install it, 
 pip install -e .
 ```
 
+## Examples
+
+Check the [examples directory](examples).
+
 ## Team Members
 
 * [Zhe An](https://github.com/JasonAn)
