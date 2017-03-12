@@ -4,7 +4,7 @@ This is our course project to reproduce and try to improve the Super-Resolution 
 
 ## Installation
 
-Reusable general codes are kept in the `toolbox` Python package. To install it, run
+A Python package `toolbox` is developed to facilitate our experiments. To install it, run
 
 ```bash
 pip install -e .
