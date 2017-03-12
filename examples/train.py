@@ -1,4 +1,4 @@
-"""Demonstrate how to use toolbox to reproduce SRCNN."""
+"""Demonstrate how to train a model."""
 from toolbox.datasets.sr import load_data
 from toolbox.models import srcnn
 from toolbox.training import train
