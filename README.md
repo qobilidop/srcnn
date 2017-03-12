@@ -18,7 +18,4 @@ pip install -e .
 * [Jiacong Li](https://github.com/jiacong1990)
 * [Liyang Xiong](https://github.com/xiongliyang219)
 
-## Main References
-
-* [Image Super-Resolution Using Deep Convolutional Networks](https://arxiv.org/abs/1501.00092)
-    * [Implementation](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html)
+## [References](https://github.com/qobilidop/srcnn/wiki/References)
