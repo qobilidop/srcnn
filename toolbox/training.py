@@ -5,9 +5,11 @@ from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 import pandas as pd
 
+from toolbox.metrics import psnr
+
 
 def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
-          optimizer='adam', loss='mse', metrics=[],
+          optimizer='adam', loss='mse', metrics=[psnr],
           save_dir='save', resume=True):
     # Ensure save directory exists
     save_dir = Path(save_dir)
