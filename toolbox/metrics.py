@@ -16,12 +16,13 @@ def ssim(y_true, y_pred):
     K2 = 0.06
     
     ## mean, std, correlation
-    mu_x = np.mean(y_pred)
-    mu_y = np.mean(y_true)
+    mu_x = tf.reduce_mean(y_pred)
+    mu_y = tf.reduce_mean(y_true)
 
-    sig_x = np.std(y_pred)
-    sig_y = np.std(y_true)
-    sig_xy = np.sqrt(sig_x * sig_y)
+    
+    sig_x = tf.nn.moments(y_pred, axes=[0])
+    sig_y = tf.nn.moments(y_true, axes=[0])
+    sig_xy = (sig_x * sig_y) ** 0.5
 
     L = len(y_true)
     C1 = (K1 * L) ** 2
