@@ -4,13 +4,15 @@ This is our course project to reproduce and try to improve the Super-Resolution 
 
 ## Installation
 
-A Python package `toolbox` is developed to facilitate our experiments. To install it along with all its dependencies, a conda environment is suggested to be created. If conda is not installed and you are on a Linux machine, run
+A Python package `toolbox` is developed to facilitate our experiments. To install it along with all its dependencies, a conda environment is suggested to be created.
+
+To install conda on a Linux machine
  
  ```bash
 . install-conda-linux.sh
 ```
 
-to install it. If [GPU prerequisites for TensorFlow](https://www.tensorflow.org/install/install_sources#optional_install_tensorflow_for_gpu_prerequisites) are satisfied, use the GPU version
+If [GPU prerequisites for TensorFlow](https://www.tensorflow.org/install/install_sources#optional_install_tensorflow_for_gpu_prerequisites) are satisfied, use the GPU version
 
 ```bash
 conda env create -f environment-gpu.yml
@@ -22,7 +24,7 @@ Otherwise, use the CPU version
 conda env create -f environment.yml
 ```
 
-The commands above create a conda environment `srcnn`, which could be activated by
+To activate the created environment `srcnn`
 
 ```bash
 source activate srcnn
