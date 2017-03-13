@@ -29,7 +29,7 @@ def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
     # Set up loggers
     weights_file_template = 'weights.{epoch:04d}.hdf5'
     model_checkpoint = ModelCheckpoint(str(save_dir / weights_file_template),
-                                       save_best_only=True)
+                                       save_weights_only=True)
     history_file = save_dir / 'history.csv'
     csv_logger = CSVLogger(str(history_file), append=resume)
 
