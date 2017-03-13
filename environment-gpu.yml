@@ -9,4 +9,3 @@ dependencies:
 - pip:
   - keras
   - tensorflow-gpu
-  - git+https://github.com/qobilidop/srcnn.git#egg=srcnn
