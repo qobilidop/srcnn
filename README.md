@@ -12,6 +12,8 @@ pip install -e .
 
 The editable mode `-e` is a must to make the data files available.
 
+### Install Dependencies
+
 Dependencies are not specified in `setup.py`, so they need to be installed separately. Two conda environment files are provided. If [GPU prerequisites for TensorFlow](https://www.tensorflow.org/install/install_sources#optional_install_tensorflow_for_gpu_prerequisites) are satisfied, use the GPU version
 
 ```bash
@@ -24,7 +26,23 @@ Otherwise, use the CPU version
 conda env create -f environment.yml
 ```
 
-If you don't use conda, you need to look into those environment files and install all the dependencies.
+### Set Up Environment on a Vanilla Ubuntu Machine
+
+We need to run our experiments on (nearly) vanilla Ubuntu instances on AWS. So we made it as simple as a single command to set up the environment. 
+
+For the GPU version
+
+```bash
+eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/scripts/create-env-gpu.sh)"
+```
+
+For the CPU version
+
+```bash
+eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/scripts/create-env.sh)"
+```
+
+After the execution, you will be in the `~/srcnn` directory and the `srcnn` conda environment, ready to run any experiments.
 
 ## Examples
 
