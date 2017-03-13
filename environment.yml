@@ -1,0 +1,12 @@
+name: srcnn
+dependencies:
+- python=3
+- h5py
+- numpy
+- pandas
+- pillow
+- scipy
+- pip:
+  - keras
+  - tensorflow
+  - git+https://github.com/qobilidop/srcnn.git#egg=srcnn
