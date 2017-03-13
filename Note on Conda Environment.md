@@ -16,7 +16,7 @@ Install Miniconda by running the installation package.
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
 
-Choose yes all the way, until the installation finished. Then activate the installation by 
+Choose yes all the way, until the installation finishes. Then, activate the installation by 
 ```
 source ~/.bashrc
 ```
@@ -35,7 +35,7 @@ Activate the new environment by running
 ```
 source activate my_env
 ```
-When you want to stop using this envinronment, type in
+When you want to stop using this envinronment, run
 ```
 source deactivate
 ```
@@ -43,6 +43,7 @@ source deactivate
 ## Install TensorFlow and Keras in the Python 3 Environment
 Same as usual, i.e.
 ```
+source activate my_env
 pip install tensorflow
 pip install keras
 ```
