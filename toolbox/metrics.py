@@ -16,14 +16,16 @@ def ssim(y_true, y_pred):
     K2 = 0.06
     
     ## mean, std, correlation
-    mu_x = np.mean(y_pred)
-    mu_y = np.mean(y_true)
+    mu_x = K.mean(y_pred)
+    mu_y = K.mean(y_true)
 
-    sig_x = np.std(y_pred)
-    sig_y = np.std(y_true)
-    sig_xy = np.sqrt(sig_x * sig_y)
+    
+    sig_x = K.std(y_pred)
+    sig_y = K.std(y_true)
+    sig_xy = (sig_x * sig_y) ** 0.5
 
-    L = len(y_true)
+    ## L, number of pixels, C1, C2, two constants
+    L =  33
     C1 = (K1 * L) ** 2
     C2 = (K2 * L) ** 2
 
