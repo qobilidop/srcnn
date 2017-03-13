@@ -47,5 +47,11 @@ source activate my_env
 pip install tensorflow
 pip install keras
 ```
+Besides, you should install the following packages:
+```
+pip install h5py
+pip install pillow
+pip install pandas
+```
 
 * [Reference](https://www.howtoing.com/how-to-install-the-anaconda-python-distribution-on-ubuntu-16-04/)
