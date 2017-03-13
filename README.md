@@ -43,4 +43,4 @@ Check the [examples directory](examples).
 ## See Also
 
 * [References](https://github.com/qobilidop/srcnn/wiki/References)
-* Various other [repositories on GitHub](https://github.com/search?utf8=%E2%9C%93&q=srcnn)
+* Other [SRCNN repositories on GitHub](https://github.com/search?utf8=%E2%9C%93&q=srcnn)
