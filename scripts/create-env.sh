@@ -8,5 +8,5 @@ git clone -q https://github.com/qobilidop/srcnn.git
 cd srcnn
 . scripts/install-conda-linux.sh
 conda env create -f environment.yml
-srouce activate srcnn
+source activate srcnn
 pip install -e .
