@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This script installs conda silently on a Linux machine.
 # See http://conda.pydata.org/docs/help/silent.html#linux-and-os-x
 
 BASH_RC=$HOME/.bashrc
