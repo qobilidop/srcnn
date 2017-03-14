@@ -10,7 +10,7 @@
 - [**ESPCN**] Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network [[arXiv](https://arxiv.org/abs/1609.05158)]
 - Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network [[arXiv](https://arxiv.org/abs/1609.04802)]
 - [**FSRCNN**] Accelerating the Super-Resolution Convolutional Neural Network [[arXiv](https://arxiv.org/abs/1608.00367)]
-- End-to-End Image Super-Resolution via Deep and Shallow Convolutional Networks [[arXiv](https://arxiv.org/abs/1607.07680)]
+- [**EEDS**] End-to-End Image Super-Resolution via Deep and Shallow Convolutional Networks [[arXiv](https://arxiv.org/abs/1607.07680)]
 - Perceptual Losses for Real-Time Style Transfer and Super-Resolution [[arXiv](https://arxiv.org/abs/1603.08155)]
   - Experiment with a perceptual loss instead of a per-pixel loss usually used.
 
