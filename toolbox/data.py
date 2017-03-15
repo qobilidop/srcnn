@@ -6,6 +6,7 @@ from keras.preprocessing.image import list_pictures
 from scipy.misc import imresize
 
 from toolbox.paths import data_dir
+from toolbox.preprocessing import modcrop
 
 
 def load_data(train_dir='Train', test_dir='Test/Set5', channel=0):
@@ -59,10 +60,3 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
     else:
         return data[:, :, :, channel:channel + 1], \
                label[:, :, :, channel:channel + 1]
-
-
-def modcrop(image, scale):
-    size = np.array(image.shape)
-    size -= size % scale
-    image = image[:size[0], :size[1]]
-    return image
