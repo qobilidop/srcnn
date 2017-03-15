@@ -6,7 +6,7 @@ from keras.callbacks import ModelCheckpoint
 import pandas as pd
 
 
-def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
+def train(model, x, y, batch_size=32, epochs=1, validation_data=None,
           save_dir='save', resume=True):
     # Ensure save directory exists
     save_dir = Path(save_dir)
@@ -23,16 +23,17 @@ def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
         # Save architecture
         config_file.write_text(model.to_yaml())
 
-    # Set up loggers
-    weights_file_template = 'weights.{epoch:04d}.hdf5'
-    model_checkpoint = ModelCheckpoint(str(save_dir / weights_file_template),
-                                       save_weights_only=True)
+    # Set up callbacks
+    callbacks = []
+    weights_file_template = 'model.{epoch:04d}.hdf5'
+    callbacks += [ModelCheckpoint(str(save_dir / weights_file_template))]
     history_file = save_dir / 'history.csv'
-    csv_logger = CSVLogger(str(history_file), append=resume)
+    callbacks += [CSVLogger(str(history_file), append=resume)]
 
     # Inherit weights
     if resume and history_file.exists():
         initial_epoch = pd.read_csv(str(history_file))['epoch'].iloc[-1] + 1
+        initial_epoch = int(round(initial_epoch))
     else:
         initial_epoch = 0
     weights_file = save_dir / \
@@ -41,7 +42,5 @@ def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
         model.load_weights(str(weights_file))
 
     # Train
-    model.fit(x, y, batch_size=batch_size, nb_epoch=nb_epoch,
-              callbacks=[model_checkpoint, csv_logger],
-              validation_data=validation_data,
-              initial_epoch=initial_epoch)
+    model.fit(x, y, batch_size=batch_size, epochs=epochs, callbacks=callbacks,
+              validation_data=validation_data, initial_epoch=initial_epoch)
