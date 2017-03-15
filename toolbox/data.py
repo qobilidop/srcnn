@@ -3,9 +3,9 @@ import numpy as np
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import list_pictures
-from scipy.misc import imresize
 
 from toolbox.paths import data_dir
+from toolbox.preprocessing import bicubic_resize
 from toolbox.preprocessing import modcrop
 
 
@@ -32,13 +32,14 @@ def generate(directory, save_path='train.h5', size_input=33, size_label=21,
     for path in filepaths:
         image = load_img(path)
         image = image.convert('YCbCr')
-        image = img_to_array(image)
 
         im_label = modcrop(image, scale)
-        hei, wid = im_label.shape[:2]
-        im_input = imresize(imresize(im_label, 1 / scale, 'bicubic'),
-                            (hei, wid), 'bicubic')
+        im_input = bicubic_resize(bicubic_resize(im_label, 1 / scale),
+                                  im_label.size)
+        im_label = img_to_array(im_label)
+        im_input = img_to_array(im_input)
 
+        hei, wid = im_label.shape[:2]
         for x in range(0, hei - size_input + 1, stride):
             for y in range(0, wid - size_input + 1, stride):
                 subim_input = im_input[x: x + size_input, y: y + size_input]
