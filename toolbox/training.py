@@ -5,11 +5,8 @@ from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 import pandas as pd
 
-from toolbox.metrics import psnr
-
 
 def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
-          optimizer='adam', loss='mse', metrics=[psnr],
           save_dir='save', resume=True):
     # Ensure save directory exists
     save_dir = Path(save_dir)
@@ -44,7 +41,6 @@ def train(model, x, y, batch_size=32, nb_epoch=1, validation_data=None,
         model.load_weights(str(weights_file))
 
     # Train
-    model.compile(optimizer, loss, metrics=metrics)
     model.fit(x, y, batch_size=batch_size, nb_epoch=nb_epoch,
               callbacks=[model_checkpoint, csv_logger],
               validation_data=validation_data,
