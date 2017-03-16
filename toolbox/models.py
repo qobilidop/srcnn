@@ -10,10 +10,10 @@ def compile_srcnn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32):
     See https://arxiv.org/abs/1501.00092.
     """
     model = Sequential()
-    model.add(Conv2D(n1, f1, kernel_initializer='he_normal',
-                     activation='relu', input_shape=(None, None, c)))
-    model.add(Conv2D(n2, f2, kernel_initializer='he_normal',
+    model.add(Conv2D(n1, f1, padding='same', kernel_initializer='he_normal',
                      activation='relu'))
-    model.add(Conv2D(c, f3, kernel_initializer='he_normal'))
+    model.add(Conv2D(n2, f2, padding='same', kernel_initializer='he_normal',
+                     activation='relu'))
+    model.add(Conv2D(c, f3, padding='same', kernel_initializer='he_normal'))
     model.compile(optimizer='adam', loss='mse', metrics=[psnr])
     return model
