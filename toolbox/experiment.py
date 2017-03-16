@@ -12,6 +12,7 @@ from toolbox.paths import data_dir
 from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
 from toolbox.preprocessing import identity
+from toolbox.visualization import plot_history
 
 
 class Experiment(object):
@@ -73,6 +74,10 @@ class Experiment(object):
         self.model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks,
                        validation_data=(x_val, y_val),
                        initial_epoch=initial_epoch)
+
+        # Make diagnostic plots
+        plot_history(str(self.history_file))
+
 
     def test(self, test_set='Set5'):
         output_dir = self.save_dir / test_set
