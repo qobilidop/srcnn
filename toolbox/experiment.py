@@ -1,3 +1,4 @@
+from functools import partial
 from pathlib import Path
 
 from keras.models import model_from_yaml
@@ -15,10 +16,11 @@ from toolbox.preprocessing import bicubic_resize
 
 
 class Experiment(object):
-    def __init__(self, model, preprocess=None, scale=3, save_dir='save'):
+    def __init__(self, model, scale=3,
+                 preprocess=partial(bicubic_resize, size=3), save_dir='save'):
         self.model = model
-        self.preprocess = preprocess
         self.scale = scale
+        self.preprocess = preprocess
         save_dir = Path(save_dir)
         save_dir.mkdir(parents=True, exist_ok=True)
         self.save_dir = save_dir
@@ -31,6 +33,9 @@ class Experiment(object):
             return self.save_dir / 'model.{epoch:04d}.hdf5'
         else:
             return self.save_dir / f'model.{epoch:04d}.hdf5'
+
+    def load_set(self, name):
+        return load_set(name, scale=self.scale, preprocess=self.preprocess)
 
     def train(self, train_set='91-image', val_set='Set5',
               batch_size=32, epochs=1, resume=True):
@@ -66,11 +71,8 @@ class Experiment(object):
             self.model.load_weights(str(weights_file))
 
         # Load data and train
-        x_train, y_train = load_set(train_set)
-        x_val, y_val = load_set(val_set)
-        if self.preprocess is not None:
-            x_train = self.preprocess(x_train)
-            x_val = self.preprocess(x_val)
+        x_train, y_train = self.load_set(train_set)
+        x_val, y_val = self.load_set(val_set)
         self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
                        callbacks=callbacks, validation_data=(x_val, y_val),
                        initial_epoch=initial_epoch)
@@ -86,20 +88,18 @@ class Experiment(object):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
 
         model = self.model
-        lr_array = img_to_array(lr_image)
-        x = lr_array[np.newaxis, :, :, 0:1]
-        if self.preprocess is not None:
-            x = self.preprocess(x)
+        x = img_to_array(self.preprocess(lr_image))
+        x = x[np.newaxis, :, :, 0:1]
         y = model.predict_on_batch(x)
 
-        bicubic = bicubic_resize(lr_image, self.scale)
-        output_array = img_to_array(bicubic)
+        bicubic_image = bicubic_resize(lr_image, self.scale)
+        output_array = img_to_array(bicubic_image)
         output_array[:, :, 0] = y[0, :, :, 0]
         output_image = array_to_img(output_array, mode='YCbCr')
 
         images_to_save = []
         images_to_save += [(hr_image, 'original')]
-        images_to_save += [(bicubic, 'bicubic')]
+        images_to_save += [(bicubic_image, 'bicubic')]
         images_to_save += [(output_image, 'output')]
         images_to_save += [(lr_image, 'input')]
         for img, label in images_to_save:

@@ -7,16 +7,26 @@ from toolbox.preprocessing import bicubic_resize
 from toolbox.preprocessing import modcrop
 
 
-def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0):
+def _identity(x):
+    return x
+
+
+def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
+             preprocess=_identity):
     dataset_dir = data_dir / name
     lr_sub_arrays = []
     hr_sub_arrays = []
     for path in dataset_dir.glob('*'):
         lr_image, hr_image = load_image_pair(str(path), scale=scale)
-        lr_sub_arrays += [img_to_array(img) for img in generate_sub_images(
-            lr_image, sub_size, sub_stride)]
-        hr_sub_arrays += [img_to_array(img) for img in generate_sub_images(
-            hr_image, sub_size * scale, sub_stride * scale)]
+        gen_sub = generate_sub_images
+        lr_sub_arrays += [
+            img_to_array(preprocess(img))
+            for img in gen_sub(lr_image, sub_size, sub_stride)
+        ]
+        hr_sub_arrays += [
+            img_to_array(img)
+            for img in gen_sub(hr_image, sub_size * scale, sub_stride * scale)
+        ]
     x = np.stack(lr_sub_arrays)
     y = np.stack(hr_sub_arrays)
     x = restrict_channel(x, channel)
@@ -24,11 +34,11 @@ def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0):
     return x, y
 
 
-def load_image_pair(path, scale=3):
+def load_image_pair(path, scale=3, preprocess=_identity):
     image = load_img(path)
     image = image.convert('YCbCr')
     hr_image = modcrop(image, scale)
-    lr_image = bicubic_resize(hr_image, 1 / scale)
+    lr_image = preprocess(bicubic_resize(hr_image, 1 / scale))
     return lr_image, hr_image
 
 
