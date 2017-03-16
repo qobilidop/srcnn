@@ -4,15 +4,12 @@ from keras.preprocessing.image import load_img
 
 from toolbox.paths import data_dir
 from toolbox.preprocessing import bicubic_resize
+from toolbox.preprocessing import identity
 from toolbox.preprocessing import modcrop
 
 
-def _identity(x):
-    return x
-
-
 def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
-             preprocess=_identity):
+             preprocess=identity):
     dataset_dir = data_dir / name
     lr_sub_arrays = []
     hr_sub_arrays = []
@@ -34,11 +31,11 @@ def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
     return x, y
 
 
-def load_image_pair(path, scale=3, preprocess=_identity):
+def load_image_pair(path, scale=3):
     image = load_img(path)
     image = image.convert('YCbCr')
     hr_image = modcrop(image, scale)
-    lr_image = preprocess(bicubic_resize(hr_image, 1 / scale))
+    lr_image = bicubic_resize(hr_image, 1 / scale)
     return lr_image, hr_image
 
 

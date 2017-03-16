@@ -8,7 +8,6 @@ def psnr(y_true, y_pred):
     return 20 * K.log(255 / K.sqrt(mse(y_true, y_pred))) / np.log(10)
 
 
-
 def ssim(y_true, y_pred):
     """structural similarity measurement system."""
     ## K1, K2 are two constants, much smaller than 1
@@ -18,7 +17,6 @@ def ssim(y_true, y_pred):
     ## mean, std, correlation
     mu_x = K.mean(y_pred)
     mu_y = K.mean(y_true)
-
     
     sig_x = K.std(y_pred)
     sig_y = K.std(y_true)

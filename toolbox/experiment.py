@@ -1,4 +1,3 @@
-from functools import partial
 from pathlib import Path
 
 from keras.models import model_from_yaml
@@ -9,18 +8,19 @@ import numpy as np
 import pandas as pd
 
 from toolbox.data import load_image_pair
-from toolbox.data import load_set
 from toolbox.paths import data_dir
 from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
+from toolbox.preprocessing import identity
 
 
 class Experiment(object):
-    def __init__(self, model, scale=3,
-                 preprocess=partial(bicubic_resize, size=3), save_dir='.'):
-        self.model = model
+    def __init__(self, scale=3, model=None, preprocess=identity, load_set=None,
+                 save_dir='.'):
         self.scale = scale
+        self.model = model
         self.preprocess = preprocess
+        self.load_set = load_set
         save_dir = Path(save_dir)
         save_dir.mkdir(parents=True, exist_ok=True)
         self.save_dir = save_dir
@@ -30,15 +30,12 @@ class Experiment(object):
 
     def weights_file(self, epoch=None):
         if epoch is None:
-            return self.save_dir / 'model.{epoch:04d}.hdf5'
+            return self.save_dir / 'weights.{epoch:04d}.hdf5'
         else:
-            return self.save_dir / f'model.{epoch:04d}.hdf5'
+            return self.save_dir / f'weights.{epoch:04d}.hdf5'
 
-    def load_set(self, name):
-        return load_set(name, scale=self.scale, preprocess=self.preprocess)
-
-    def train(self, train_set='91-image', val_set='Set5',
-              batch_size=32, epochs=1, resume=True):
+    def train(self, train_set='91-image', val_set='Set5', epochs=1,
+              resume=True):
         # Check architecture
         if resume and self.config_file.exists():
             # Check architecture consistency
@@ -73,8 +70,8 @@ class Experiment(object):
         # Load data and train
         x_train, y_train = self.load_set(train_set)
         x_val, y_val = self.load_set(val_set)
-        self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
-                       callbacks=callbacks, validation_data=(x_val, y_val),
+        self.model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks,
+                       validation_data=(x_val, y_val),
                        initial_epoch=initial_epoch)
 
     def test(self, test_set='Set5'):
