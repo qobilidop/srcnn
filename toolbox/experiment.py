@@ -14,6 +14,7 @@ from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
 from toolbox.preprocessing import modcrop
 from toolbox.metrics import psnr
+from toolbox.paths import data_dir
 
 
 class Experiment(object):
@@ -73,9 +74,16 @@ class Experiment(object):
                   callbacks=callbacks, validation_data=validation_data,
                   initial_epoch=initial_epoch)
 
+    def test(self, test_set):
+        output_dir = self.save_dir / test_set
+        output_dir.mkdir(exist_ok=True)
+        for image_path in (data_dir / 'Test' / test_set).glob('*'):
+            self.test_on_image(str(image_path),
+                               str(output_dir / image_path.stem))
+
     def test_on_image(self, image_path, prefix, suffix='png'):
         scale = 3
-        image = load_img(image_path,)
+        image = load_img(image_path)
         image = image.convert('YCbCr')
         im_label = modcrop(image, scale)
         im_input = bicubic_resize(bicubic_resize(im_label, 1 / scale),
