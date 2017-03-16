@@ -1,7 +1,6 @@
 """Example experiment."""
 from functools import partial
 
-from toolbox.data import load_image_pair
 from toolbox.data import load_set
 from toolbox.models import compile_srcnn
 from toolbox.experiment import Experiment
@@ -20,7 +19,6 @@ test_sets = ['Set5', 'Set14']
 preprocess = partial(bicubic_resize, size=scale)
 load_set = partial(load_set, sub_size=11, sub_stride=5, scale=scale,
                    channel=0, preprocess=preprocess)
-load_image_pair = partial(load_image_pair, scale=scale, preprocess=preprocess)
 
 # Training
 experiment = Experiment(scale=scale, model=model, preprocess=preprocess,
