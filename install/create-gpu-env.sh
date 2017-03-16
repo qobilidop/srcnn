@@ -6,7 +6,7 @@ sudo apt-get -y install git
 cd ~
 git clone -q https://github.com/qobilidop/srcnn.git
 cd srcnn
-. scripts/install-conda-linux.sh
-conda env create -f environment-gpu.yml
+. install/install-conda-on-linux.sh
+conda env create -f install/gpu-environment.yml
 source activate srcnn
 pip install -e .
