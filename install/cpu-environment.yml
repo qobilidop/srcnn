@@ -1,11 +1,10 @@
 name: srcnn
 dependencies:
-- python=3
-- h5py
-- numpy
-- pandas
-- pillow
-- scipy
+- matplotlib=2.0.0=np112py36_0
+- numpy=1.12.0=py36_0
+- pandas=0.19.2=np112py36_1
+- pillow=4.0.0=py36_1
+- python=3.6.0=0
 - pip:
-  - keras
-  - tensorflow
+  - keras==2.0.0
+  - tensorflow==1.0.1
