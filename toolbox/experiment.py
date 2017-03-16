@@ -17,7 +17,7 @@ from toolbox.preprocessing import bicubic_resize
 
 class Experiment(object):
     def __init__(self, model, scale=3,
-                 preprocess=partial(bicubic_resize, size=3), save_dir='save'):
+                 preprocess=partial(bicubic_resize, size=3), save_dir='.'):
         self.model = model
         self.scale = scale
         self.preprocess = preprocess
