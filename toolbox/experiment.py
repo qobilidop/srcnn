@@ -1,24 +1,24 @@
 from pathlib import Path
 
-from keras.models import load_model
 from keras.models import model_from_yaml
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import img_to_array
-from keras.preprocessing.image import array_to_img
 from keras.preprocessing.image import load_img
 import numpy as np
 import pandas as pd
 
+from toolbox.data import load_set
+from toolbox.paths import data_dir
 from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
 from toolbox.preprocessing import modcrop
-from toolbox.metrics import psnr
-from toolbox.paths import data_dir
 
 
 class Experiment(object):
-    def __init__(self, save_dir='save'):
+    def __init__(self, model, preprocess=None, save_dir='save'):
+        self.model = model
+        self.preprocess = preprocess
         save_dir = Path(save_dir)
         save_dir.mkdir(parents=True, exist_ok=True)
         self.save_dir = save_dir
@@ -26,27 +26,23 @@ class Experiment(object):
         self.history_file = save_dir / 'history.csv'
         self.model_file = save_dir / 'model.hdf5'
 
-    @property
-    def model(self):
-        return load_model(str(self.model_file), custom_objects={'psnr': psnr})
-
     def weights_file(self, epoch=None):
         if epoch is None:
             return self.save_dir / 'model.{epoch:04d}.hdf5'
         else:
             return self.save_dir / f'model.{epoch:04d}.hdf5'
 
-    def train(self, model, x, y, batch_size=32, epochs=1, validation_data=None,
-              resume=True):
+    def train(self, train_set='91-image', val_set='Set5',
+              batch_size=32, epochs=1, resume=True):
         # Check architecture
         if resume and self.config_file.exists():
             # Check architecture consistency
             saved_model = model_from_yaml(self.config_file.read_text())
-            if model.get_config() != saved_model.get_config():
+            if self.model.get_config() != saved_model.get_config():
                 raise ValueError('Model architecture has changed.')
         else:
             # Save architecture
-            self.config_file.write_text(model.to_yaml())
+            self.config_file.write_text(self.model.to_yaml())
 
         # Set up callbacks
         callbacks = []
@@ -67,14 +63,19 @@ class Experiment(object):
             initial_epoch = 0
         weights_file = self.weights_file(epoch=initial_epoch - 1)
         if weights_file.exists():
-            model.load_weights(str(weights_file))
+            self.model.load_weights(str(weights_file))
 
-        # Train
-        model.fit(x, y, batch_size=batch_size, epochs=epochs,
-                  callbacks=callbacks, validation_data=validation_data,
-                  initial_epoch=initial_epoch)
+        # Load data and train
+        x_train, y_train = load_set(train_set)
+        x_val, y_val = load_set(val_set)
+        if self.preprocess is not None:
+            x_train = self.preprocess(x_train)
+            x_val = self.preprocess(x_val)
+        self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs,
+                       callbacks=callbacks, validation_data=(x_val, y_val),
+                       initial_epoch=initial_epoch)
 
-    def test(self, test_set):
+    def test(self, test_set='Set5'):
         output_dir = self.save_dir / test_set
         output_dir.mkdir(exist_ok=True)
         for image_path in (data_dir / 'Test' / test_set).glob('*'):
