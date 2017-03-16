@@ -4,21 +4,21 @@ from keras.models import model_from_yaml
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import img_to_array
-from keras.preprocessing.image import load_img
 import numpy as np
 import pandas as pd
 
+from toolbox.data import load_image_pair
 from toolbox.data import load_set
 from toolbox.paths import data_dir
 from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
-from toolbox.preprocessing import modcrop
 
 
 class Experiment(object):
-    def __init__(self, model, preprocess=None, save_dir='save'):
+    def __init__(self, model, preprocess=None, scale=3, save_dir='save'):
         self.model = model
         self.preprocess = preprocess
+        self.scale = scale
         save_dir = Path(save_dir)
         save_dir.mkdir(parents=True, exist_ok=True)
         self.save_dir = save_dir
@@ -78,32 +78,29 @@ class Experiment(object):
     def test(self, test_set='Set5'):
         output_dir = self.save_dir / test_set
         output_dir.mkdir(exist_ok=True)
-        for image_path in (data_dir / 'Test' / test_set).glob('*'):
+        for image_path in (data_dir / test_set).glob('*'):
             self.test_on_image(str(image_path),
                                str(output_dir / image_path.stem))
 
-    def test_on_image(self, image_path, prefix, suffix='png'):
-        scale = 3
-        image = load_img(image_path)
-        image = image.convert('YCbCr')
-        im_label = modcrop(image, scale)
-        im_input = bicubic_resize(bicubic_resize(im_label, 1 / scale),
-                                  im_label.size)
-        im_label = img_to_array(im_label)[6:-6, 6:-6, :]
-        im_input = img_to_array(im_input)
+    def test_on_image(self, path, prefix, suffix='png'):
+        lr_image, hr_image = load_image_pair(path, scale=self.scale)
 
         model = self.model
-        x = im_input[np.newaxis, :, :, 0:1]
+        lr_array = img_to_array(lr_image)
+        x = lr_array[np.newaxis, :, :, 0:1]
+        if self.preprocess is not None:
+            x = self.preprocess(x)
         y = model.predict_on_batch(x)
 
-        output_arr = im_label
-        output_arr[:, :, 0] = y[0, :, :, 0]
+        bicubic = bicubic_resize(lr_image, self.scale)
+        output_array = img_to_array(bicubic)
+        output_array[:, :, 0] = y[0, :, :, 0]
+        output_image = array_to_img(output_array, mode='YCbCr')
 
-        arrays_to_save = []
-        arrays_to_save += [(img_to_array(image), 'original')]
-        arrays_to_save += [(im_label, 'bicubic')]
-        arrays_to_save += [(output_arr, 'output')]
-        arrays_to_save += [(im_input, 'input')]
-        for array, label in arrays_to_save:
-            img = array_to_img(array, mode='YCbCr')
+        images_to_save = []
+        images_to_save += [(hr_image, 'original')]
+        images_to_save += [(bicubic, 'bicubic')]
+        images_to_save += [(output_image, 'output')]
+        images_to_save += [(lr_image, 'input')]
+        for img, label in images_to_save:
             img.convert(mode='RGB').save('.'.join([prefix, label, suffix]))
