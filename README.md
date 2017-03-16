@@ -57,7 +57,8 @@ The Deep Glasses Team
 * [Jiacong Li](https://github.com/jiacong1990)
 * [Liyang Xiong](https://github.com/xiongliyang219)
 
-## See Also
+## Main References
 
-* [References](https://github.com/qobilidop/srcnn/wiki/References)
-* Other [SRCNN repositories on GitHub](https://github.com/search?utf8=%E2%9C%93&q=srcnn)
+* [**ESPCN**] Real-Time Single Image and Video Super-Resolution Using an Efficient Sub-Pixel Convolutional Neural Network [[arXiv](https://arxiv.org/abs/1609.05158)]
+* [**FSRCNN**] Accelerating the Super-Resolution Convolutional Neural Network [[arXiv](https://arxiv.org/abs/1608.00367)]
+* [**SRCNN**] Image Super-Resolution Using Deep Convolutional Networks [[arXiv](https://arxiv.org/abs/1501.00092)] [[website](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html)]
