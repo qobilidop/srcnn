@@ -58,5 +58,5 @@ Check the [examples directory](examples).
 
 ## See Also
 
-* [References](docs/references.md)
+* [References](https://github.com/qobilidop/srcnn/wiki/References)
 * Other [SRCNN repositories on GitHub](https://github.com/search?utf8=%E2%9C%93&q=srcnn)
