@@ -48,8 +48,9 @@ After the execution, you will be in the `~/srcnn` directory and the `srcnn` cond
 
 Check the [examples directory](examples).
 
-## Team Members
+## Authors
 
+The Deep Glasses Team
 * [Zhe An](https://github.com/JasonAn)
 * [Bili Dong](https://github.com/qobilidop)
 * [Zheng Fang](https://github.com/Catus61)
