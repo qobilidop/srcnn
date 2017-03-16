@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from keras.backend import tf
 from keras.models import model_from_yaml
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
@@ -8,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from toolbox.data import load_image_pair
+from toolbox.metrics import psnr
 from toolbox.paths import data_dir
 from toolbox.preprocessing import array_to_img
 from toolbox.preprocessing import bicubic_resize
@@ -82,9 +84,17 @@ class Experiment(object):
     def test(self, test_set='Set5'):
         output_dir = self.save_dir / test_set
         output_dir.mkdir(exist_ok=True)
+        rows = []
         for image_path in (data_dir / test_set).glob('*'):
-            self.test_on_image(str(image_path),
-                               str(output_dir / image_path.stem))
+            rows += [self.test_on_image(str(image_path),
+                                        str(output_dir / image_path.stem))]
+        df = pd.DataFrame(rows)
+        row = pd.Series()
+        row['name'] = 'average'
+        row['psnr'] = df['psnr'].mean()
+        df = df.append(row, ignore_index=True)
+        df.to_csv(str(self.save_dir / f'metrics_{test_set}.csv'))
+
 
     def test_on_image(self, path, prefix, suffix='png'):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
@@ -92,11 +102,18 @@ class Experiment(object):
         model = self.model
         x = img_to_array(self.preprocess(lr_image))
         x = x[np.newaxis, :, :, 0:1]
-        y = model.predict_on_batch(x)
+        y_pred = model.predict_on_batch(x)
+
+        row = pd.Series()
+        row['name'] = Path(path).stem
+        y_true = img_to_array(hr_image)[np.newaxis, :, :, 0:1]
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            row['psnr'] = psnr(y_true.flatten(), y_pred.flatten()).eval()
 
         bicubic_image = bicubic_resize(lr_image, self.scale)
         output_array = img_to_array(bicubic_image)
-        output_array[:, :, 0] = y[0, :, :, 0]
+        output_array[:, :, 0] = y_pred[0, :, :, 0]
         output_image = array_to_img(output_array, mode='YCbCr')
 
         images_to_save = []
@@ -106,3 +123,5 @@ class Experiment(object):
         images_to_save += [(lr_image, 'input')]
         for img, label in images_to_save:
             img.convert(mode='RGB').save('.'.join([prefix, label, suffix]))
+
+        return row
