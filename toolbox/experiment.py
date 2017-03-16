@@ -71,12 +71,11 @@ class Experiment(object):
             self.model.load_weights(str(weights_file))
 
         # Load data and train
-        if initial_epoch < epochs:
-            x_train, y_train = self.load_set(train_set)
-            x_val, y_val = self.load_set(val_set)
-            self.model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks,
-                           validation_data=(x_val, y_val),
-                           initial_epoch=initial_epoch)
+        x_train, y_train = self.load_set(train_set)
+        x_val, y_val = self.load_set(val_set)
+        self.model.fit(x_train, y_train, epochs=epochs, callbacks=callbacks,
+                       validation_data=(x_val, y_val),
+                       initial_epoch=initial_epoch)
 
         # Make diagnostic plots
         plot_history(str(self.history_file))
