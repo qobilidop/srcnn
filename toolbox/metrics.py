@@ -1,11 +1,12 @@
 import keras.backend as K
-from keras.metrics import mse
 import numpy as np
+import tensorflow as tf
 
 
 def psnr(y_true, y_pred):
-    """Peak signal-to-noise ratio."""
-    return 20 * K.log(255 / K.sqrt(mse(y_true, y_pred))) / np.log(10)
+    """Peak signal-to-noise ratio averaged over samples and channels."""
+    mse = K.mean(K.square(y_true - y_pred), axis=(1, 2))
+    return K.mean(20 * K.log(255 / K.sqrt(mse)) / np.log(10))
 
 
 def ssim(y_true, y_pred):
@@ -29,3 +30,13 @@ def ssim(y_true, y_pred):
 
     ssim = (2 * mu_x * mu_y + C1) * (2 * sig_xy * C2) * 1.0 / ((mu_x ** 2 + mu_y ** 2 + C1) * (sig_x ** 2 + sig_y ** 2 + C2))
     return ssim
+
+
+def tf_eval(variable):
+    """Evaluate a TensorFlow Variable.
+
+    See https://www.tensorflow.org/versions/master/api_docs/python/state_ops/variables#Variable.eval
+    """
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        return variable.eval()
