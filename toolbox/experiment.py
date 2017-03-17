@@ -26,11 +26,17 @@ class Experiment(object):
         self.load_set = load_set
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
-        self.config_file = self.save_dir / 'config.yaml'
-        self.history_file = self.save_dir / 'history.csv'
-        self.model_file = self.save_dir / 'model.hdf5'
-        self.weights_dir = self.save_dir / 'weights'
+
+        self.train_dir = self.save_dir / 'train'
+        self.train_dir.mkdir(exist_ok=True)
+        self.config_file = self.train_dir / 'config.yaml'
+        self.history_file = self.train_dir / 'history.csv'
+        self.model_file = self.train_dir / 'model.hdf5'
+        self.weights_dir = self.train_dir / 'weights'
         self.weights_dir.mkdir(exist_ok=True)
+
+        self.test_dir = self.save_dir / 'test'
+        self.test_dir.mkdir(exist_ok=True)
 
     def weights_file(self, epoch=None):
         if epoch is None:
@@ -82,7 +88,8 @@ class Experiment(object):
         plot_history(str(self.history_file))
 
     def test(self, test_set='Set5'):
-        output_dir = self.save_dir / test_set
+        print('Testing on', test_set)
+        output_dir = self.test_dir / test_set
         output_dir.mkdir(exist_ok=True)
         rows = []
         for image_path in (data_dir / test_set).glob('*'):
@@ -93,7 +100,7 @@ class Experiment(object):
         row['name'] = 'average'
         row['psnr'] = df['psnr'].mean()
         df = df.append(row, ignore_index=True)
-        df.to_csv(str(self.save_dir / f'metrics_{test_set}.csv'))
+        df.to_csv(str(self.test_dir / f'metrics_{test_set}.csv'))
 
 
     def test_on_image(self, path, prefix, suffix='png'):

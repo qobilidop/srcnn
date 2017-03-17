@@ -5,6 +5,7 @@ import pandas as pd
 
 
 def plot_history(path):
+    prefix = path.rsplit('.', maxsplit=1)[0]
     df = pd.read_csv(path)
     epoch = df['epoch']
     for metric in ['Loss', 'PSNR']:
@@ -16,5 +17,5 @@ def plot_history(path):
         plt.legend(loc='best')
         plt.xlabel('Epoch')
         plt.ylabel(metric)
-        plt.savefig('.'.join(['history', metric.lower(), 'png']))
+        plt.savefig('.'.join([prefix, metric.lower(), 'png']))
         plt.close()
