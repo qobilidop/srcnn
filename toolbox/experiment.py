@@ -4,6 +4,9 @@ from keras.models import model_from_yaml
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import img_to_array
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -14,7 +17,6 @@ from toolbox.metrics import psnr
 from toolbox.paths import data_dir
 from toolbox.utils import identity
 from toolbox.utils import tf_eval
-from toolbox.visualization import plot_history
 
 
 class Experiment(object):
@@ -27,11 +29,12 @@ class Experiment(object):
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
 
+        self.config_file = self.save_dir / 'config.yaml'
+        self.model_file = self.save_dir / 'model.hdf5'
+
         self.train_dir = self.save_dir / 'train'
         self.train_dir.mkdir(exist_ok=True)
-        self.config_file = self.train_dir / 'config.yaml'
         self.history_file = self.train_dir / 'history.csv'
-        self.model_file = self.train_dir / 'model.hdf5'
         self.weights_dir = self.train_dir / 'weights'
         self.weights_dir.mkdir(exist_ok=True)
 
@@ -89,7 +92,23 @@ class Experiment(object):
                        initial_epoch=initial_epoch)
 
         # Make diagnostic plots
-        plot_history(str(self.history_file))
+        self.plot_history()
+
+    def plot_history(self):
+        prefix = str(self.history_file).rsplit('.', maxsplit=1)[0]
+        df = pd.read_csv(str(self.history_file))
+        epoch = df['epoch']
+        for metric in ['Loss', 'PSNR']:
+            train = df[metric.lower()]
+            val = df['val_' + metric.lower()]
+            plt.figure()
+            plt.plot(epoch, train, label='train')
+            plt.plot(epoch, val, label='val')
+            plt.legend(loc='best')
+            plt.xlabel('Epoch')
+            plt.ylabel(metric)
+            plt.savefig('.'.join([prefix, metric.lower(), 'png']))
+            plt.close()
 
     def test(self, test_set='Set5', metrics=[psnr]):
         print('Test on', test_set)
