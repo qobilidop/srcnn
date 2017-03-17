@@ -8,12 +8,12 @@ import numpy as np
 import pandas as pd
 
 from toolbox.data import load_image_pair
+from toolbox.image import array_to_img
+from toolbox.image import bicubic_resize
+from toolbox.image import identity
 from toolbox.metrics import psnr
 from toolbox.metrics import tf_eval
 from toolbox.paths import data_dir
-from toolbox.preprocessing import array_to_img
-from toolbox.preprocessing import bicubic_resize
-from toolbox.preprocessing import identity
 from toolbox.visualization import plot_history
 
 

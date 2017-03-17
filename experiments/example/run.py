@@ -4,7 +4,7 @@ from functools import partial
 from toolbox.data import load_set
 from toolbox.models import compile_srcnn
 from toolbox.experiment import Experiment
-from toolbox.preprocessing import bicubic_resize
+from toolbox.image import bicubic_resize
 
 
 # Model

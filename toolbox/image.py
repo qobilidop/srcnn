@@ -1,4 +1,4 @@
-"""Image preprocessing tools."""
+"""Image processing tools."""
 import numpy as np
 from PIL import Image
 
