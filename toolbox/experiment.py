@@ -44,6 +44,14 @@ class Experiment(object):
         else:
             return self.weights_dir / f'ep{epoch:04d}.hdf5'
 
+    @property
+    def latest_epoch(self):
+        try:
+            return pd.read_csv(str(self.history_file))['epoch'].iloc[-1]
+        except FileNotFoundError or pd.io.common.EmptyDataError:
+            pass
+        return -1
+
     def train(self, train_set='91-image', val_set='Set5', epochs=1,
               resume=True):
         # Check architecture
@@ -64,18 +72,14 @@ class Experiment(object):
         callbacks += [CSVLogger(str(self.history_file), append=resume)]
 
         # Inherit weights
-        if resume and self.history_file.exists():
-            try:
-                epoch = pd.read_csv(str(self.history_file))['epoch']
-                initial_epoch = epoch.iloc[-1] + 1
-                initial_epoch = int(round(initial_epoch))
-            except pd.io.common.EmptyDataError:
-                initial_epoch = 0
+        if resume:
+            latest_epoch = self.latest_epoch
+            if latest_epoch > -1:
+                weights_file = self.weights_file(epoch=latest_epoch)
+                self.model.load_weights(str(weights_file))
+            initial_epoch = latest_epoch + 1
         else:
             initial_epoch = 0
-        weights_file = self.weights_file(epoch=initial_epoch - 1)
-        if weights_file.exists():
-            self.model.load_weights(str(weights_file))
 
         # Load data and train
         x_train, y_train = self.load_set(train_set)
