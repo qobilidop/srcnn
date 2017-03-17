@@ -17,7 +17,7 @@ train_set = '91-image'
 val_set = 'Set5'
 test_sets = ['Set5', 'Set14']
 preprocess = partial(bicubic_resize, size=scale)
-load_set = partial(load_set, sub_size=11, sub_stride=5, scale=scale,
+load_set = partial(load_set, sub_size=20, sub_stride=100, scale=scale,
                    channel=0, preprocess=preprocess)
 
 # Training
