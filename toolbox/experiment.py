@@ -24,18 +24,19 @@ class Experiment(object):
         self.model = model
         self.preprocess = preprocess
         self.load_set = load_set
-        save_dir = Path(save_dir)
-        save_dir.mkdir(parents=True, exist_ok=True)
-        self.save_dir = save_dir
-        self.config_file = save_dir / 'config.yaml'
-        self.history_file = save_dir / 'history.csv'
-        self.model_file = save_dir / 'model.hdf5'
+        self.save_dir = Path(save_dir)
+        self.save_dir.mkdir(parents=True, exist_ok=True)
+        self.config_file = self.save_dir / 'config.yaml'
+        self.history_file = self.save_dir / 'history.csv'
+        self.model_file = self.save_dir / 'model.hdf5'
+        self.weights_dir = self.save_dir / 'weights'
+        self.weights_dir.mkdir(exist_ok=True)
 
     def weights_file(self, epoch=None):
         if epoch is None:
-            return self.save_dir / 'weights.{epoch:04d}.hdf5'
+            return self.weights_dir / 'ep{epoch:04d}.hdf5'
         else:
-            return self.save_dir / f'weights.{epoch:04d}.hdf5'
+            return self.weights_dir / f'ep{epoch:04d}.hdf5'
 
     def train(self, train_set='91-image', val_set='Set5', epochs=1,
               resume=True):
