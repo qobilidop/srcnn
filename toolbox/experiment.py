@@ -110,7 +110,7 @@ class Experiment(object):
             plt.savefig('.'.join([prefix, metric.lower(), 'png']))
             plt.close()
 
-    def test(self, test_set='Set5', metrics=[psnr]):
+    def test(self, test_set='Set5'):
         print('Test on', test_set)
         output_dir = self.test_dir / test_set
         output_dir.mkdir(exist_ok=True)
@@ -124,24 +124,6 @@ class Experiment(object):
         row['psnr'] = df['psnr'].mean()
         df = df.append(row, ignore_index=True)
         df.to_csv(str(self.test_dir / f'metrics_{test_set}.csv'))
-
-        # Tabulate metrics history
-        model = model_from_yaml(self.config_file.read_text())
-        x, y_true = self.load_set(test_set)
-        epochs = self.latest_epoch + 1
-        rows = []
-        for epoch in range(epochs):
-            print(f'Epoch {epoch}')
-            row = pd.Series()
-            row['epoch'] = epoch
-            model.load_weights(str(self.weights_file(epoch)))
-            y_pred = model.predict(x)
-            for metric in metrics:
-                row[metric.__name__] = tf_eval(metric(y_true, y_pred))
-                print(metric.__name__, row[metric.__name__])
-            rows += [row]
-        df = pd.DataFrame(rows)
-        df.to_csv(str(self.test_dir / f'metrics_{test_set}_history.csv'))
 
     def test_on_image(self, path, prefix, suffix='png'):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
