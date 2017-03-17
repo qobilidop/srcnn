@@ -13,10 +13,6 @@ def bicubic_resize(image, size):
     return image.resize(size, resample=Image.BICUBIC)
 
 
-def identity(image):
-    return image
-
-
 def modcrop(image, scale):
     size = np.array(image.size)
     size -= size % scale

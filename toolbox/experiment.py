@@ -10,10 +10,10 @@ import pandas as pd
 from toolbox.data import load_image_pair
 from toolbox.image import array_to_img
 from toolbox.image import bicubic_resize
-from toolbox.image import identity
 from toolbox.metrics import psnr
-from toolbox.metrics import tf_eval
 from toolbox.paths import data_dir
+from toolbox.utils import identity
+from toolbox.utils import tf_eval
 from toolbox.visualization import plot_history
 
 
@@ -22,7 +22,7 @@ class Experiment(object):
                  save_dir='.'):
         self.scale = scale
         self.model = model
-        self.preprocess = preprocess
+        self.preprocess = preprocess or (lambda x: x)
         self.load_set = load_set
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)

@@ -1,6 +1,5 @@
 import keras.backend as K
 import numpy as np
-import tensorflow as tf
 
 
 def psnr(y_true, y_pred):
@@ -30,13 +29,3 @@ def ssim(y_true, y_pred):
 
     ssim = (2 * mu_x * mu_y + C1) * (2 * sig_xy * C2) * 1.0 / ((mu_x ** 2 + mu_y ** 2 + C1) * (sig_x ** 2 + sig_y ** 2 + C2))
     return ssim
-
-
-def tf_eval(variable):
-    """Evaluate a TensorFlow Variable.
-
-    See https://www.tensorflow.org/versions/master/api_docs/python/state_ops/variables#Variable.eval
-    """
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        return variable.eval()

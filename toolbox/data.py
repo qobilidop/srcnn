@@ -3,9 +3,9 @@ from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 
 from toolbox.image import bicubic_resize
-from toolbox.image import identity
 from toolbox.image import modcrop
 from toolbox.paths import data_dir
+from toolbox.utils import identity
 
 
 def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
