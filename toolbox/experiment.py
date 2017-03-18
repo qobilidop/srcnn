@@ -91,10 +91,7 @@ class Experiment(object):
                        validation_data=(x_val, y_val),
                        initial_epoch=initial_epoch)
 
-        # Make diagnostic plots
-        self.plot_history()
-
-    def plot_history(self):
+        # Plot metrics history
         prefix = str(self.history_file).rsplit('.', maxsplit=1)[0]
         df = pd.read_csv(str(self.history_file))
         epoch = df['epoch']
@@ -110,22 +107,30 @@ class Experiment(object):
             plt.savefig('.'.join([prefix, metric.lower(), 'png']))
             plt.close()
 
-    def test(self, test_set='Set5'):
+    def test(self, test_set='Set5', metrics=[psnr]):
         print('Test on', test_set)
-        output_dir = self.test_dir / test_set
-        output_dir.mkdir(exist_ok=True)
+        image_dir = self.test_dir / test_set
+        image_dir.mkdir(exist_ok=True)
+
+        # Evaluate metrics on each image
         rows = []
         for image_path in (data_dir / test_set).glob('*'):
             rows += [self.test_on_image(str(image_path),
-                                        str(output_dir / image_path.stem))]
+                                        str(image_dir / image_path.stem),
+                                        metrics=metrics)]
         df = pd.DataFrame(rows)
+
+        # Compute average metrics
         row = pd.Series()
         row['name'] = 'average'
-        row['psnr'] = df['psnr'].mean()
+        for col in df:
+            if col != 'name':
+                row[col] = df[col].mean()
         df = df.append(row, ignore_index=True)
-        df.to_csv(str(self.test_dir / f'metrics_{test_set}.csv'))
 
-    def test_on_image(self, path, prefix, suffix='png'):
+        df.to_csv(str(self.test_dir / f'{test_set}_metrics.csv'))
+
+    def test_on_image(self, path, prefix, suffix='png', metrics=[psnr]):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
 
         model = self.model
@@ -136,7 +141,8 @@ class Experiment(object):
         row = pd.Series()
         row['name'] = Path(path).stem
         y_true = img_to_array(hr_image)[np.newaxis, ...]
-        row['psnr'] = tf_eval(psnr(y_true, y_pred))
+        for metric in metrics:
+            row[metric.__name__] = tf_eval(metric(y_true, y_pred))
 
         bicubic_image = bicubic_resize(lr_image, self.scale)
         output_array = img_to_array(bicubic_image)
