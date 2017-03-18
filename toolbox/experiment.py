@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 
 from keras.models import model_from_yaml
 from keras.callbacks import CSVLogger
@@ -128,27 +129,34 @@ class Experiment(object):
                 row[col] = df[col].mean()
         df = df.append(row, ignore_index=True)
 
-        df.to_csv(str(self.test_dir / f'{test_set}_metrics.csv'))
+        df.to_csv(str(self.test_dir / f'metrics_{test_set}.csv'))
 
     def test_on_image(self, path, prefix, suffix='png', metrics=[psnr]):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
-
         model = self.model
         x = img_to_array(self.preprocess(lr_image))
         x = x[np.newaxis, :, :, 0:1]
-        y_pred = model.predict_on_batch(x)
 
+        # Measure run time
+        start = time.perf_counter()
+        y_pred = model.predict_on_batch(x)
+        end = time.perf_counter()
+
+        # Generate output image
+        bicubic_image = bicubic_resize(lr_image, self.scale)
+        output_array = img_to_array(bicubic_image)
+        output_array[:, :, 0] = np.clip(y_pred[0, :, :, 0], 0, 255)
+        output_image = array_to_img(output_array, mode='YCbCr')
+
+        # Record metrics
         row = pd.Series()
         row['name'] = Path(path).stem
+        row['time'] = end - start
         y_true = img_to_array(hr_image)[np.newaxis, ...]
         for metric in metrics:
             row[metric.__name__] = tf_eval(metric(y_true, y_pred))
 
-        bicubic_image = bicubic_resize(lr_image, self.scale)
-        output_array = img_to_array(bicubic_image)
-        output_array[:, :, 0] = y_pred[0, :, :, 0]
-        output_image = array_to_img(output_array, mode='YCbCr')
-
+        # Save images
         images_to_save = []
         images_to_save += [(hr_image, 'original')]
         images_to_save += [(bicubic_image, 'bicubic')]
