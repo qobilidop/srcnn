@@ -3,14 +3,13 @@ from functools import partial
 from toolbox.data import load_set
 from toolbox.models import compile
 from toolbox.models import espcn
-#from toolbox.models import compile_srcnn
 from toolbox.experiment import Experiment
 from toolbox.image import bicubic_resize
 
 
 # Model
 scale = 3
-model = espcn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32)
+model = compile(espcn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32))
 model.summary()
 
 # Data

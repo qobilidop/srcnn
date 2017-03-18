@@ -44,8 +44,7 @@ def fsrcnn(c=1, d=56, s=12, m=4, k=3):
     return model
 
 
-# def compile_espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=9, f4=3, s1 = 3):
-def compile_espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=1, f4=3, s1=1):
+def espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=1, f4=3, s1=1):
     """Compile an ESPCN model.
 
     See https://arxiv.org/abs/1609.05158
@@ -58,5 +57,4 @@ def compile_espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=1, f4=3, s1=1):
     model.add(Conv2D(c, f3, padding='same', kernel_initializer='he_normal'))
     model.add(Conv2DTranspose(n3, f4, strides=s1, padding='same',
                               kernel_initializer='he_normal'))
-    model.compile(optimizer='adam', loss='mse', metrics=[psnr])
     return model
