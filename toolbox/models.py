@@ -25,6 +25,20 @@ def srcnn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32):
     model.add(Conv2D(c, f3, padding='same', kernel_initializer='he_normal'))
     return model
 
+#def compile_espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=9, f4=3, s1 = 3):
+def compile_espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, n3=1, f4=3, s1 = 1):
+    """Compile an ESPCN model.
+    
+    See https://arxiv.org/abs/1609.05158
+    """
+    model = Sequential()
+    model.add(Conv2D(n1, f1, padding='same', kernel_initializer='he_normal', activation='tanh', input_shape=(None, None, c)))
+    model.add(Conv2D(n2, f2, padding='same', kernel_initializer='he_normal', activation='tanh'))
+    model.add(Conv2D(c, f3, padding='same', kernel_initializer='he_normal'))
+    model.add(Conv2DTranspose(n3, f4, strides = s1, padding='same', kernel_initializer='he_normal'))
+    model.compile(optimizer='adam', loss='mse', metrics=[psnr])
+    return model
+
 
 def fsrcnn(c=1, f1=5, f2=1, f3=3, f4=9, n1=56, n2=12, n3=1, s1=3):
     """Build an FSRCNN model.
