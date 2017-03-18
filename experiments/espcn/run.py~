@@ -10,7 +10,7 @@ from toolbox.image import bicubic_resize
 
 # Model
 scale = 3
-model = espcn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32)
+model = compile_espcn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32)
 model.summary()
 
 # Data

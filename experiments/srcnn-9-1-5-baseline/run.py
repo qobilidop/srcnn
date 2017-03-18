@@ -1,15 +1,25 @@
 from functools import partial
 
 from toolbox.data import load_set
+<<<<<<< Updated upstream
 from toolbox.models import compile
 from toolbox.models import srcnn
+=======
+#from toolbox.models import compile_srcnn
+from toolbox.models import compile_deconvcnn
+>>>>>>> Stashed changes
 from toolbox.experiment import Experiment
 from toolbox.image import bicubic_resize
 
 
 # Model
 scale = 3
+<<<<<<< Updated upstream
 model = compile(srcnn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32))
+=======
+#model = compile_srcnn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32)
+model = compile_deconvcnn(c=1, f1=9, f2=1, f3=5, n1=64, n2=32)
+>>>>>>> Stashed changes
 model.summary()
 
 # Data
