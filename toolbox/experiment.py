@@ -168,9 +168,9 @@ class Experiment(object):
         row = pd.Series()
         row['name'] = Path(path).stem
         row['time'] = end - start
-        y_true = img_to_array(hr_image)[np.newaxis, ...]
+        y_true = self.inverse_post_process(img_to_array(hr_image))
         for metric in metrics:
-            row[metric.__name__] = tf_eval(metric(y_true, y_pred))
+            row[metric.__name__] = tf_eval(metric(y_true, y_pred[0]))
 
         # Save images
         images_to_save = []
@@ -203,5 +203,5 @@ class ESPCNExperiment(Experiment):
         return super().post_process(y, auxiliary_array)
 
     def inverse_post_process(self, output_array):
-        output_array = inverse_periodic_shuffling(output_array, r=self.scale)
-        return super().inverse_post_process(output_array)
+        output_array = super().inverse_post_process(output_array)
+        return inverse_periodic_shuffling(output_array, r=self.scale)

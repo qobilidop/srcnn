@@ -43,14 +43,14 @@ def fsrcnn(c=1, d=56, s=12, m=4, k=3):
     return model
 
 
-def espcn(input_sahpe, c=1, f1=5, f2=3, f3=3, n1=64, n2=32, r=3):
+def espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, r=3):
     """Build an ESPCN model.
 
     See https://arxiv.org/abs/1609.05158
     """
     model = Sequential()
     model.add(Conv2D(n1, f1, padding='same', kernel_initializer='he_normal',
-                     activation='tanh', input_shape=input_sahpe))
+                     activation='tanh', input_shape=(None, None, c)))
     model.add(Conv2D(n2, f2, padding='same', kernel_initializer='he_normal',
                      activation='tanh'))
     model.add(Conv2D(c * r ** 2, f3, padding='same',
