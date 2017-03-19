@@ -2,7 +2,10 @@ from keras.layers import Conv2D
 from keras.layers import Conv2DTranspose
 from keras.layers import InputLayer
 from keras.models import Sequential
+import numpy as np
+import tensorflow as tf
 
+from toolbox.layers import ImageResize
 from toolbox.metrics import psnr
 
 
@@ -12,7 +15,7 @@ def compile(model, optimizer='adam', loss='mse', metrics=[psnr], **kwargs):
     return model
 
 
-def build_srcnn(x, f=[9, 1, 5], n=[64, 32]):
+def build_srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
     """Build an SRCNN model.
 
     See https://arxiv.org/abs/1501.00092
@@ -21,6 +24,8 @@ def build_srcnn(x, f=[9, 1, 5], n=[64, 32]):
     model = Sequential()
     model.add(InputLayer(input_shape=x.shape[-3:]))
     c = x.shape[-1]
+    size = (np.array(x.shape)[[-3, -2]] * scale).astype(int)
+    model.add(ImageResize(size=size, method=tf.image.ResizeMethod.BICUBIC))
     for ni, fi in zip(n, f):
         model.add(Conv2D(ni, fi, padding='same',
                          kernel_initializer='he_normal', activation='relu'))
