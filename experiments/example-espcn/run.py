@@ -8,7 +8,7 @@ from toolbox.experiment import ESPCNExperiment
 
 # Model
 scale = 3
-model = compile(espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, r=3))
+model = compile(espcn(c=1, f1=5, f2=3, f3=3, n1=64, n2=32, r=scale))
 model.summary()
 
 # Data
