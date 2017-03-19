@@ -4,8 +4,7 @@ from functools import partial
 from toolbox.data import load_set
 from toolbox.models import compile
 from toolbox.models import srcnn
-from toolbox.experiment import Experiment
-from toolbox.image import bicubic_resize
+from toolbox.experiment import SRCNNExperiment
 
 
 # Model
@@ -17,13 +16,11 @@ model.summary()
 train_set = '91-image'
 val_set = 'Set5'
 test_sets = ['Set5', 'Set14']
-preprocess = partial(bicubic_resize, size=scale)
-load_set = partial(load_set, sub_size=20, sub_stride=100, scale=scale,
-                   channel=0, preprocess=preprocess)
+load_set = partial(load_set, sub_size=20, sub_stride=100, scale=scale)
 
 # Training
-experiment = Experiment(scale=scale, model=model, preprocess=preprocess,
-                        load_set=load_set, save_dir='.')
+experiment = SRCNNExperiment(scale=scale, model=model, load_set=load_set,
+                             save_dir='.')
 experiment.train(train_set=train_set, val_set=val_set, epochs=2, resume=True)
 
 # Evaluation
