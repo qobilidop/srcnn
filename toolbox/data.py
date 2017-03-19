@@ -5,11 +5,9 @@ from keras.preprocessing.image import load_img
 from toolbox.image import bicubic_resize
 from toolbox.image import modcrop
 from toolbox.paths import data_dir
-from toolbox.utils import identity
 
 
-def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
-             preprocess=identity):
+def load_set(name, sub_size=7, sub_stride=3, scale=3):
     dataset_dir = data_dir / name
     lr_sub_arrays = []
     hr_sub_arrays = []
@@ -17,7 +15,7 @@ def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
         lr_image, hr_image = load_image_pair(str(path), scale=scale)
         gen_sub = generate_sub_images
         lr_sub_arrays += [
-            img_to_array(preprocess(img))
+            img_to_array(img)
             for img in gen_sub(lr_image, sub_size, sub_stride)
         ]
         hr_sub_arrays += [
@@ -26,8 +24,6 @@ def load_set(name, sub_size=7, sub_stride=3, scale=3, channel=0,
         ]
     x = np.stack(lr_sub_arrays)
     y = np.stack(hr_sub_arrays)
-    x = restrict_channel(x, channel)
-    y = restrict_channel(y, channel)
     return x, y
 
 
@@ -43,10 +39,3 @@ def generate_sub_images(image, crop_size, stride):
     for i in range(0, image.size[0] - crop_size + 1, stride):
         for j in range(0, image.size[1] - crop_size + 1, stride):
             yield image.crop([i, j, i + crop_size, j + crop_size])
-
-
-def restrict_channel(array, channel):
-    if channel != 'all':
-        return array[:, :, :, channel:channel + 1]
-    else:
-        return array

@@ -2,10 +2,6 @@
 import tensorflow as tf
 
 
-def identity(x):
-    return x
-
-
 def tf_eval(variable):
     """Evaluate a TensorFlow Variable.
 
