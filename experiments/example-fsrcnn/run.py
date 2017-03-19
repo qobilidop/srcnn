@@ -9,7 +9,7 @@ from toolbox.experiment import FSRCNNExperiment
 
 # Model
 scale = 3
-model = compile(fsrcnn(c=1, d=56, s=12, m=4, k=3))
+model = compile(fsrcnn(c=1, d=56, s=12, m=4, k=scale))
 model.summary()
 
 # Data
