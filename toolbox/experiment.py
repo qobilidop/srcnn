@@ -49,7 +49,7 @@ class Experiment(object):
     def latest_epoch(self):
         try:
             return pd.read_csv(str(self.history_file))['epoch'].iloc[-1]
-        except FileNotFoundError or pd.io.common.EmptyDataError:
+        except (FileNotFoundError, pd.io.common.EmptyDataError):
             pass
         return -1
 
