@@ -7,13 +7,6 @@ import tensorflow as tf
 
 from toolbox.layers import ImageResize
 from toolbox.layers import Conv2DSubPixel
-from toolbox.metrics import psnr
-
-
-def compile(model, optimizer='adam', loss='mse', metrics=[psnr], **kwargs):
-    """Compile a model with default settings."""
-    model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
-    return model
 
 
 def build_srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
