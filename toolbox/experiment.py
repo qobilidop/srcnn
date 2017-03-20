@@ -174,7 +174,8 @@ class Experiment(object):
         start = time.perf_counter()
         x = self.pre_process(img_to_array(lr_image))
         model = self.compile(self.build_model(x))
-        model.load_weights(str(self.model_file))
+        if self.model_file.exists():
+            model.load_weights(str(self.model_file))
         y_pred = model.predict_on_batch(x)
         output_array = self.post_process(y_pred[0], bicubic_array)
         output_image = array_to_img(output_array, mode='YCbCr')

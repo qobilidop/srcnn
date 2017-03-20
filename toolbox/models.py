@@ -9,17 +9,22 @@ from toolbox.layers import ImageResize
 from toolbox.layers import Conv2DSubPixel
 
 
+def build_bicubic(x, scale=3):
+    model = Sequential()
+    model.add(InputLayer(input_shape=x.shape[-3:]))
+    size = (np.array(x.shape)[[-3, -2]] * scale).astype(int)
+    model.add(ImageResize(size=size, method=tf.image.ResizeMethod.BICUBIC))
+    return model
+
+
 def build_srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
     """Build an SRCNN model.
 
     See https://arxiv.org/abs/1501.00092
     """
     assert len(f) == len(n) + 1
-    model = Sequential()
-    model.add(InputLayer(input_shape=x.shape[-3:]))
+    model = build_bicubic(x, scale=scale)
     c = x.shape[-1]
-    size = (np.array(x.shape)[[-3, -2]] * scale).astype(int)
-    model.add(ImageResize(size=size, method=tf.image.ResizeMethod.BICUBIC))
     for ni, fi in zip(n, f):
         model.add(Conv2D(ni, fi, padding='same',
                          kernel_initializer='he_normal', activation='relu'))
