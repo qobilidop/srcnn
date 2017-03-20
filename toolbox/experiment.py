@@ -2,6 +2,7 @@ from functools import partial
 from pathlib import Path
 import time
 
+from keras import backend as K
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import img_to_array
@@ -16,7 +17,6 @@ from toolbox.image import array_to_img
 from toolbox.image import bicubic_resize
 from toolbox.metrics import psnr
 from toolbox.paths import data_dir
-from toolbox.utils import tf_eval
 
 
 class Experiment(object):
@@ -186,7 +186,7 @@ class Experiment(object):
         row['time'] = end - start
         y_true = self.inverse_post_process(img_to_array(hr_image))
         for metric in metrics:
-            row[metric.__name__] = tf_eval(metric(y_true, y_pred))
+            row[metric.__name__] = K.eval(metric(y_true, y_pred))
 
         # Save images
         images_to_save = []
