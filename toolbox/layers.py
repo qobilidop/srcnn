@@ -3,6 +3,9 @@ import numpy as np
 import tensorflow as tf
 
 
+custom_layers = {}
+
+
 class ImageResize(Layer):
     def __init__(self, size, method, **kwargs):
         self.size = size
@@ -14,6 +17,15 @@ class ImageResize(Layer):
 
     def compute_output_shape(self, input_shape):
         return (*input_shape[:-3], *self.size, input_shape[-1])
+
+    def get_config(self):
+        config = super().get_config()
+        config['size'] = self.size
+        config['method'] = self.method
+        return config
+
+
+custom_layers['ImageResize'] = ImageResize
 
 
 class Conv2DSubPixel(Layer):
@@ -45,3 +57,11 @@ class Conv2DSubPixel(Layer):
         if Crr % (r ** 2) != 0:
             raise ValueError
         return (input_shape[0], H * r, W * r, Crr // (r ** 2))
+
+    def get_config(self):
+        config = super().get_config()
+        config['scale'] = self.scale
+        return config
+
+
+custom_layers['Conv2DSubPixel'] = Conv2DSubPixel
