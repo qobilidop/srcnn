@@ -8,7 +8,7 @@ custom_layers = {}
 
 class ImageResize(Layer):
     def __init__(self, size, method, **kwargs):
-        self.size = size
+        self.size = tuple(size)
         self.method = method
         super().__init__(**kwargs)
 
