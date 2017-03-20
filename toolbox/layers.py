@@ -6,26 +6,33 @@ import tensorflow as tf
 custom_layers = {}
 
 
-class ImageResize(Layer):
-    def __init__(self, size, method, **kwargs):
-        self.size = tuple(size)
+class ImageRescale(Layer):
+    def __init__(self, scale, method=tf.image.ResizeMethod.BICUBIC,
+                 trainable=False, **kwargs):
+        self.scale = scale
         self.method = method
-        super().__init__(**kwargs)
+        super().__init__(trainable=trainable, **kwargs)
+
+    def compute_size(self, shape):
+        size = np.array(shape)[[1, 2]] * self.scale
+        return tuple(size.astype(int))
 
     def call(self, x):
-        return tf.image.resize_images(x, size=self.size, method=self.method)
+        size = self.compute_size(x.shape.as_list())
+        return tf.image.resize_images(x, size, method=self.method)
 
     def compute_output_shape(self, input_shape):
-        return (*input_shape[:-3], *self.size, input_shape[-1])
+        size = self.compute_size(input_shape)
+        return (input_shape[0], *size, input_shape[3])
 
     def get_config(self):
         config = super().get_config()
-        config['size'] = self.size
+        config['scale'] = self.scale
         config['method'] = self.method
         return config
 
 
-custom_layers['ImageResize'] = ImageResize
+custom_layers['ImageRescale'] = ImageRescale
 
 
 class Conv2DSubPixel(Layer):
@@ -33,9 +40,9 @@ class Conv2DSubPixel(Layer):
 
     See https://arxiv.org/abs/1609.05158
     """
-    def __init__(self, scale, **kwargs):
+    def __init__(self, scale, trainable=False, **kwargs):
         self.scale = scale
-        super().__init__(**kwargs)
+        super().__init__(trainable=trainable, **kwargs)
 
     def call(self, t):
         r = self.scale

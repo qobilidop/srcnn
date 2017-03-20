@@ -2,18 +2,16 @@ from keras.layers import Conv2D
 from keras.layers import Conv2DTranspose
 from keras.layers import InputLayer
 from keras.models import Sequential
-import numpy as np
 import tensorflow as tf
 
-from toolbox.layers import ImageResize
+from toolbox.layers import ImageRescale
 from toolbox.layers import Conv2DSubPixel
 
 
 def build_bicubic(x, scale=3):
     model = Sequential()
     model.add(InputLayer(input_shape=x.shape[-3:]))
-    size = (np.array(x.shape)[[-3, -2]] * scale).astype(int)
-    model.add(ImageResize(size=size, method=tf.image.ResizeMethod.BICUBIC))
+    model.add(ImageRescale(scale, method=tf.image.ResizeMethod.BICUBIC))
     return model
 
 
