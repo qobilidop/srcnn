@@ -5,6 +5,7 @@ import time
 from keras import backend as K
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
+from keras.optimizers import adam
 from keras.preprocessing.image import img_to_array
 import matplotlib
 matplotlib.use('Agg')
@@ -76,8 +77,8 @@ class Experiment(object):
         array = self._ensure_channel(array, 0)
         return array
 
-    def compile(self, model, optimizer='adam', loss='mse', metrics=[psnr],
-                **kwargs):
+    def compile(self, model, optimizer=adam(decay=1), loss='mse',
+                metrics=[psnr], **kwargs):
         """Compile model with default settings."""
         model.compile(optimizer=optimizer, loss=loss, metrics=metrics,
                       **kwargs)
