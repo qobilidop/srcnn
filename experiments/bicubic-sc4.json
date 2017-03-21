@@ -1,0 +1,14 @@
+{
+  "scale": 4,
+  "model": {
+    "name": "bicubic",
+    "params": {}
+  },
+  "train_set": "91-image",
+  "val_set": "Set5",
+  "test_sets": ["Set5", "Set14"],
+  "lr_sub_size": 11,
+  "lr_sub_stride": 5,
+  "epochs": 1,
+  "save_dir": "bicubic-sc4"
+}

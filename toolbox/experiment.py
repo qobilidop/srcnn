@@ -15,7 +15,7 @@ import pandas as pd
 from toolbox.data import load_image_pair
 from toolbox.image import array_to_img
 from toolbox.metrics import psnr
-from toolbox.models import build_bicubic
+from toolbox.models import bicubic
 from toolbox.paths import data_dir
 
 
@@ -160,7 +160,7 @@ class Experiment(object):
                 row[col] = df[col].mean()
         df = df.append(row, ignore_index=True)
 
-        df.to_csv(str(self.test_dir / f'metrics_{test_set}.csv'))
+        df.to_csv(str(self.test_dir / f'{test_set}/metrics.csv'))
 
     def test_on_image(self, path, prefix, suffix='png', metrics=[psnr]):
         # Load images
@@ -168,10 +168,9 @@ class Experiment(object):
 
         # Generate bicubic image
         x = img_to_array(lr_image)[np.newaxis, ...]
-        bicubic_model = build_bicubic(x, scale=self.scale)
+        bicubic_model = bicubic(x, scale=self.scale)
         y = bicubic_model.predict_on_batch(x)
         bicubic_array = np.clip(y[0], 0, 255)
-        bicubic_image = array_to_img(bicubic_array, mode='YCbCr')
 
         # Generate output image and measure run time
         start = time.perf_counter()
@@ -195,7 +194,6 @@ class Experiment(object):
         # Save images
         images_to_save = []
         images_to_save += [(hr_image, 'original')]
-        images_to_save += [(bicubic_image, 'bicubic')]
         images_to_save += [(output_image, 'output')]
         images_to_save += [(lr_image, 'input')]
         for img, label in images_to_save:

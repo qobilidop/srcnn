@@ -8,20 +8,20 @@ from toolbox.layers import ImageRescale
 from toolbox.layers import Conv2DSubPixel
 
 
-def build_bicubic(x, scale=3):
+def bicubic(x, scale=3):
     model = Sequential()
     model.add(InputLayer(input_shape=x.shape[-3:]))
     model.add(ImageRescale(scale, method=tf.image.ResizeMethod.BICUBIC))
     return model
 
 
-def build_srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
+def srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
     """Build an SRCNN model.
 
     See https://arxiv.org/abs/1501.00092
     """
     assert len(f) == len(n) + 1
-    model = build_bicubic(x, scale=scale)
+    model = bicubic(x, scale=scale)
     c = x.shape[-1]
     for ni, fi in zip(n, f):
         model.add(Conv2D(ni, fi, padding='same',
@@ -31,7 +31,7 @@ def build_srcnn(x, f=[9, 1, 5], n=[64, 32], scale=3):
     return model
 
 
-def build_fsrcnn(x, d=56, s=12, m=4, scale=3):
+def fsrcnn(x, d=56, s=12, m=4, scale=3):
     """Build an FSRCNN model.
 
     See https://arxiv.org/abs/1608.00367
@@ -49,7 +49,7 @@ def build_fsrcnn(x, d=56, s=12, m=4, scale=3):
     return model
 
 
-def build_espcn(x, f=[5, 3, 3], n=[64, 32], scale=3):
+def espcn(x, f=[5, 3, 3], n=[64, 32], scale=3):
     """Build an ESPCN model.
 
     See https://arxiv.org/abs/1609.05158
@@ -65,3 +65,7 @@ def build_espcn(x, f=[5, 3, 3], n=[64, 32], scale=3):
                      kernel_initializer='he_normal'))
     model.add(Conv2DSubPixel(scale))
     return model
+
+
+def get_model(name):
+    return globals()[name]
