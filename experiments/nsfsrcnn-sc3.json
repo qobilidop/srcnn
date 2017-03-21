@@ -1,0 +1,14 @@
+{
+  "save_dir": "nsfsrcnn-pos2-sc3",
+  "model": {
+    "name": "nsfsrcnn",
+    "params": {"d": 56, "s": 12, "m": 4, "pos": 2}
+  },
+  "scale": 3,
+  "train_set": "91-image",
+  "val_set": "Set5",
+  "test_sets": ["Set5", "Set14"],
+  "lr_sub_size": 11,
+  "lr_sub_stride": 5,
+  "epochs": 1
+}
