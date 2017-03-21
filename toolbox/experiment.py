@@ -14,8 +14,8 @@ import pandas as pd
 
 from toolbox.data import load_image_pair
 from toolbox.image import array_to_img
-from toolbox.image import bicubic_resize
 from toolbox.metrics import psnr
+from toolbox.models import build_bicubic
 from toolbox.paths import data_dir
 
 
@@ -167,12 +167,15 @@ class Experiment(object):
         lr_image, hr_image = load_image_pair(path, scale=self.scale)
 
         # Generate bicubic image
-        bicubic_image = bicubic_resize(lr_image, self.scale)
-        bicubic_array = img_to_array(bicubic_image)
+        x = img_to_array(lr_image)[np.newaxis, ...]
+        bicubic_model = build_bicubic(x, scale=self.scale)
+        y = bicubic_model.predict_on_batch(x)
+        bicubic_array = np.clip(y[0], 0, 255)
+        bicubic_image = array_to_img(bicubic_array, mode='YCbCr')
 
         # Generate output image and measure run time
         start = time.perf_counter()
-        x = self.pre_process(img_to_array(lr_image))
+        x = self.pre_process(x)
         model = self.compile(self.build_model(x))
         if self.model_file.exists():
             model.load_weights(str(self.model_file))
