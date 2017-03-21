@@ -4,7 +4,7 @@ import numpy as np
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 
-from toolbox.image import bicubic_resize
+from toolbox.image import bicubic_rescale
 from toolbox.image import modcrop
 from toolbox.paths import data_dir
 
@@ -32,7 +32,7 @@ def load_image_pair(path, scale=3):
     image = load_img(path)
     image = image.convert('YCbCr')
     hr_image = modcrop(image, scale)
-    lr_image = bicubic_resize(hr_image, 1 / scale)
+    lr_image = bicubic_rescale(hr_image, 1 / scale)
     return lr_image, hr_image
 
 
