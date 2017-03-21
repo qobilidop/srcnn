@@ -46,24 +46,23 @@ class Conv2DSubPixel(Layer):
 
     def call(self, t):
         r = self.scale
-        new_shape = self.compute_output_shape(t.shape.as_list())
+        shape = t.shape.as_list()
+        new_shape = self.compute_output_shape(shape)
+        H, W = shape[1:3]
         C = new_shape[-1]
-        xv, yv, cv = np.meshgrid(*[range(size) for size in new_shape[1:]],
-                                 indexing='ij')
-        # See equation 4
-        xv, yv, cv = xv // r, yv // r, C * r * (yv % r) + C * (xv % r) + cv
-        indices = list(zip(xv.flatten(), yv.flatten(), cv.flatten()))
-        t = tf.transpose(t, perm=[1, 2, 3, 0])
-        t = tf.gather_nd(t, indices)
-        t = tf.transpose(t, perm=[1, 0])
-        return tf.reshape(t, (-1,) + new_shape[1:])
+        t = tf.reshape(t, [-1, H, W, r, r, C])
+        # Here we are different from Equation 4 from the paper. That equation
+        # is equivalent to switching 3 and 4 in `perm`. But I feel my
+        # implementation is more natural.
+        t = tf.transpose(t, perm=[0, 1, 3, 2, 4, 5])  # S, H, r, H, r, C
+        t = tf.reshape(t, [-1, H * r, W * r, C])
+        return t
 
     def compute_output_shape(self, input_shape):
         r = self.scale
-        H, W, Crr = np.array(input_shape[1:])
-        if Crr % (r ** 2) != 0:
-            raise ValueError
-        return (input_shape[0], H * r, W * r, Crr // (r ** 2))
+        H, W, rrC = np.array(input_shape[1:])
+        assert rrC % (r ** 2) == 0
+        return (input_shape[0], H * r, W * r, rrC // (r ** 2))
 
     def get_config(self):
         config = super().get_config()
