@@ -173,15 +173,15 @@ class Experiment(object):
         bicubic_array = np.clip(y[0], 0, 255)
 
         # Generate output image and measure run time
-        start = time.perf_counter()
         x = self.pre_process(x)
         model = self.compile(self.build_model(x))
         if self.model_file.exists():
             model.load_weights(str(self.model_file))
+        start = time.perf_counter()
         y_pred = model.predict_on_batch(x)
+        end = time.perf_counter()
         output_array = self.post_process(y_pred[0], bicubic_array)
         output_image = array_to_img(output_array, mode='YCbCr')
-        end = time.perf_counter()
 
         # Record metrics
         row = pd.Series()
