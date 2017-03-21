@@ -1,10 +1,10 @@
 {
-  "save_dir": "espcn-5-3-3-sc3",
+  "save_dir": "espcn-5-3-3-sc4",
   "model": {
     "name": "srcnn",
     "params": {"f": [5, 3, 3],  "n": [64, 32]}
   },
-  "scale": 3,
+  "scale": 4,
   "train_set": "91-image",
   "val_set": "Set5",
   "test_sets": ["Set5", "Set14"],
