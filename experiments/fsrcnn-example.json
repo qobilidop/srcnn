@@ -1,0 +1,14 @@
+{
+  "save_dir": "fsrcnn-example",
+  "model": {
+    "name": "fsrcnn",
+    "params": {"d": 56, "s": 12, "m": 4}
+  },
+  "scale": 3,
+  "train_set": "91-image",
+  "val_set": "Set5",
+  "test_sets": ["Set5", "Set14"],
+  "lr_sub_size": 20,
+  "lr_sub_stride": 100,
+  "epochs": 2
+}

@@ -1,0 +1,14 @@
+{
+  "save_dir": "espcn-example",
+  "model": {
+    "name": "espcn",
+    "params": {"f": [5, 3, 3],  "n": [64, 32]}
+  },
+  "scale": 3,
+  "train_set": "91-image",
+  "val_set": "Set5",
+  "test_sets": ["Set5", "Set14"],
+  "lr_sub_size": 20,
+  "lr_sub_stride": 100,
+  "epochs": 2
+}

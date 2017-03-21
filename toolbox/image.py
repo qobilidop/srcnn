@@ -7,9 +7,9 @@ def array_to_img(x, mode='YCbCr'):
     return Image.fromarray(x.astype('uint8'), mode=mode)
 
 
-def bicubic_resize(image, size):
-    if isinstance(size, (float, int)):
-        size = (np.array(image.size) * size).astype(int)
+def bicubic_rescale(image, scale):
+    if isinstance(scale, (float, int)):
+        size = (np.array(image.size) * scale).astype(int)
     return image.resize(size, resample=Image.BICUBIC)
 
 

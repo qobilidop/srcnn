@@ -1,10 +1,10 @@
-import keras.backend as K
+from keras import backend as K
 import numpy as np
 
 
 def psnr(y_true, y_pred):
-    """Peak signal-to-noise ratio averaged over samples."""
-    mse = K.mean(K.square(y_true - y_pred), axis=(-3, -2, -1))
+    """Peak signal-to-noise ratio averaged over samples and channels."""
+    mse = K.mean(K.square(y_true - y_pred), axis=(-3, -2))
     return K.mean(20 * K.log(255 / K.sqrt(mse)) / np.log(10))
 
 

@@ -1,0 +1,14 @@
+{
+  "save_dir": "srcnn-9-1-5-sc4",
+  "model": {
+    "name": "srcnn",
+    "params": {"f": [9, 1, 5],  "n": [64, 32]}
+  },
+  "scale": 4,
+  "train_set": "91-image",
+  "val_set": "Set5",
+  "test_sets": ["Set5", "Set14"],
+  "lr_sub_size": 11,
+  "lr_sub_stride": 5,
+  "epochs": 500
+}
