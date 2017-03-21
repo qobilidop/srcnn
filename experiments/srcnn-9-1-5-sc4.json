@@ -1,8 +1,8 @@
 {
-  "save_dir": "bicubic-sc4",
+  "save_dir": "srcnn-9-1-5-sc4",
   "model": {
-    "name": "bicubic",
-    "params": {}
+    "name": "srcnn",
+    "params": {"f": [9, 1, 5],  "n": [64, 32]}
   },
   "scale": 4,
   "train_set": "91-image",
@@ -10,5 +10,5 @@
   "test_sets": ["Set5", "Set14"],
   "lr_sub_size": 11,
   "lr_sub_stride": 5,
-  "epochs": 1
+  "epochs": 500
 }
