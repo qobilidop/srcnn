@@ -1,7 +1,7 @@
 {
   "save_dir": "espcn-sc3",
   "model": {
-    "name": "srcnn",
+    "name": "espcn",
     "params": {"f": [5, 3, 3],  "n": [64, 32]}
   },
   "scale": 3,
