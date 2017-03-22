@@ -38,9 +38,14 @@ for scale in [3, 4]:
             model = save_dir.stem.rsplit('-', 1)[0].upper()
             history_file = save_dir / f'train/history.csv'
             history = pd.read_csv(str(history_file))
-            plt.plot(history.epoch, history.val_psnr, label=model)
+            plt.plot(history.epoch, history.val_psnr, label=model, alpha=0.8)
     plt.legend()
     plt.xlabel('Epochs')
     plt.ylabel('Average test PSNR (dB)')
     plt.savefig(str(results_dir / f'history-sc{scale}.png'))
+    if scale == 3:
+        plt.ylim(32.5, 34.5)
+    if scale == 4:
+        plt.ylim(30, 32)
+    plt.savefig(str(results_dir / f'history-sc{scale}-zoom.png'))
     plt.close()
