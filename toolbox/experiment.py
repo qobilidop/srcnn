@@ -77,7 +77,7 @@ class Experiment(object):
         array = self._ensure_channel(array, 0)
         return array
 
-    def compile(self, model, optimizer=adam(decay=1), loss='mse',
+    def compile(self, model, optimizer=adam(lr=1e-4, decay=1e-5), loss='mse',
                 metrics=[psnr], **kwargs):
         """Compile model with default settings."""
         model.compile(optimizer=optimizer, loss=loss, metrics=metrics,
