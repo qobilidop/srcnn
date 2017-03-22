@@ -21,10 +21,12 @@ from toolbox.paths import data_dir
 
 
 class Experiment(object):
-    def __init__(self, scale=3, load_set=None, build_model=None, save_dir='.'):
+    def __init__(self, scale=3, load_set=None, build_model=None,
+                 optimizer='adam', save_dir='.'):
         self.scale = scale
         self.load_set = partial(load_set, scale=scale)
         self.build_model = partial(build_model, scale=scale)
+        self.optimizer = optimizer
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -77,11 +79,9 @@ class Experiment(object):
         array = self._ensure_channel(array, 0)
         return array
 
-    def compile(self, model, optimizer=adam(lr=1e-4, decay=1e-5), loss='mse',
-                metrics=[psnr], **kwargs):
+    def compile(self, model):
         """Compile model with default settings."""
-        model.compile(optimizer=optimizer, loss=loss, metrics=metrics,
-                      **kwargs)
+        model.compile(optimizer=self.optimizer, loss='mse', metrics=[psnr])
         return model
 
     def train(self, train_set='91-image', val_set='Set5', epochs=1,
