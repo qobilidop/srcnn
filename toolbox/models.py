@@ -48,6 +48,7 @@ def fsrcnn(x, d=56, s=12, m=4, scale=3):
                               kernel_initializer='he_normal'))
     return model
 
+
 def nsfsrcnn(x, d=56, s=12, m=4, scale=3, pos=1):
     """Build an FSRCNN model, but change deconv position.
 
@@ -58,8 +59,10 @@ def nsfsrcnn(x, d=56, s=12, m=4, scale=3, pos=1):
     c = x.shape[-1]
     f1 = [5, 1] + [3] * pos
     n1 = [d, s] + [s] * pos
-    f2 = [3] * (m - pos - 1) + [1, 9]
-    n2 = [s] * (m - pos - 1) + [d, c]
+    f2 = [3] * (m - pos - 1) + [1]
+    n2 = [s] * (m - pos - 1) + [d]
+    f3 = 9
+    n3 = c
     for ni, fi in zip(n1, f1):
         model.add(Conv2D(ni, fi, padding='same',
                          kernel_initializer='he_normal', activation='relu'))
@@ -68,7 +71,10 @@ def nsfsrcnn(x, d=56, s=12, m=4, scale=3, pos=1):
     for ni, fi in zip(n2, f2):
         model.add(Conv2D(ni, fi, padding='same',
                          kernel_initializer='he_normal', activation='relu'))
+    model.add(Conv2D(n3, f3, padding='same',
+                         kernel_initializer='he_normal'))
     return model
+
 
 def espcn(x, f=[5, 3, 3], n=[64, 32], scale=3):
     """Build an ESPCN model.
