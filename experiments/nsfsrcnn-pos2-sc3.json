@@ -10,5 +10,5 @@
   "test_sets": ["Set5", "Set14"],
   "lr_sub_size": 11,
   "lr_sub_stride": 5,
-  "epochs": 1
+  "epochs": 500
 }
