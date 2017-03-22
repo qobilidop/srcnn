@@ -1,5 +1,5 @@
 {
-  "save_dir": "fsrcnn-56-12-4-sc3",
+  "save_dir": "fsrcnn-sc3",
   "model": {
     "name": "fsrcnn",
     "params": {"d": 56, "s": 12, "m": 4}
