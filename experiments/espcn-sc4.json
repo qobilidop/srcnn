@@ -10,5 +10,12 @@
   "test_sets": ["Set5", "Set14"],
   "lr_sub_size": 11,
   "lr_sub_stride": 5,
-  "epochs": 500
+  "epochs": 2000,
+  "optimizer": {
+    "name": "adam",
+    "params": {
+      "lr": 1e-3,
+      "decay": 0
+    }
+  }
 }
