@@ -24,9 +24,12 @@ for scale in [3, 4]:
         plt.semilogx(time, psnr, '.')
         plt.grid(True, which='both')
         for x, y, s in zip(time, psnr, model):
+            if 'NS' in s:
+                s = s.split('-')[1]
             plt.text(x, y, s)
         plt.xlabel('Run time (sec)')
         plt.ylabel('PSNR (dB)')
+        plt.title(f'Scale {scale} on {test_set}')
         plt.savefig(str(results_dir / f'performance-sc{scale}-{test_set}.png'))
         plt.close()
 
@@ -43,9 +46,10 @@ for scale in [3, 4]:
     plt.xlabel('Epochs')
     plt.ylabel('Average test PSNR (dB)')
     plt.savefig(str(results_dir / f'history-sc{scale}.png'))
+    plt.xlim(0, 500)
     if scale == 3:
-        plt.ylim(32.5, 34.5)
+        plt.ylim(31.5, 34.5)
     if scale == 4:
-        plt.ylim(30, 32)
+        plt.ylim(29, 32)
     plt.savefig(str(results_dir / f'history-sc{scale}-zoom.png'))
     plt.close()
