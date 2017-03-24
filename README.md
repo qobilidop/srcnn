@@ -10,13 +10,37 @@ We have implemented [SRCNN], [FSRCNN] and [ESPCN] in [Keras] with [TensorFlow] b
 
 ## Installation
 
-A Python package `toolbox` is developed to facilitate our experiments. You need to install it to reproduce our experiments. The easiest way to install is
+A Python package `toolbox` is developed to facilitate our experiments. You need to install it to reproduce our experiments. If the dependencies as defined in [env-gpu.yml](install/env-gpu.yml) or [env-cpu.yml](install/env-cpu.yml) are already satisfied, simply do
  
 ```bash
 pip install -e .
 ```
 
-For other situations, see this more detailed [installation instructions](install/README.md).
+to install the package. Otherwise you can create a conda environment `srcnn` for all the dependencies by
+
+```bash
+conda env create -f install/env-gpu.yml
+```
+
+or
+
+```bash
+conda env create -f install/env-cpu.yml
+```
+
+We have also provided scripts to make it easy to set up an environment on a vanilla Ubuntu machine. Simply do
+
+```bash
+eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/install/create-env-gpu.sh)"
+```
+
+or
+
+```bash
+eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/install/create-env-cpu.sh)"
+```
+
+and you'll be in the `~/srcnn` directory and the `srcnn` conda environment, ready to run any experiment.
 
 ## Authors
 
