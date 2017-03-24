@@ -40,7 +40,7 @@ or
 eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/install/create-env-cpu.sh)"
 ```
 
-and you'll be in the `~/srcnn` directory and the `srcnn` conda environment, ready to run any experiment.
+and you'll be in the ~/srcnn directory and the `srcnn` conda environment, ready to run any experiment.
 
 ## Experiments
 
