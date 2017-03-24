@@ -42,6 +42,28 @@ eval "$(curl -fsSL https://raw.githubusercontent.com/qobilidop/srcnn/master/inst
 
 and you'll be in the `~/srcnn` directory and the `srcnn` conda environment, ready to run any experiment.
 
+## Experiments
+
+An experiment is configured by a json file in the [experiments](experiments) directory. To run an experiment, `cd` into the [experiments](experiments) directory and do
+
+```bash
+python run.py {experiment-name}.json
+```
+
+You can also do
+
+```bash
+python run_all.py
+```
+
+to run all the experiments at once. But note that it may take a very long time.
+
+Once some experiments are finished, diagnostic plots can be made by
+
+```bash
+python plot.py
+```
+
 ## Authors
 
 The Deep Glasses Team :eyeglasses:
