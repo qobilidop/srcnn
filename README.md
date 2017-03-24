@@ -1,4 +1,4 @@
-# Super-Resolution Convolutional Neural Network
+# Convolutional Neural Networks for Single Image Super-Resolution
 
 We have implemented [SRCNN], [FSRCNN] and [ESPCN] in [Keras] with [TensorFlow] backend. The network architectures are implemented in [models.py](toolbox/models.py) and [layers.py](toolbox/layers.py). Our results are described in our [final report](https://github.com/qobilidop/srcnn/releases/download/final/final-report.pdf). The [experiments data](https://github.com/qobilidop/srcnn/releases/download/final/experiments-data.zip) used to get our results are also provided. To reduce the file size, weights files at each epoch are not included in the data file. But the final model file is included and there are enough data to reproduce all the plots in our final report.
 
