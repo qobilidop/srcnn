@@ -1,6 +1,6 @@
 # Super-Resolution Convolutional Neural Network
 
-We have implemented [SRCNN], [FSRCNN] and [ESPCN] in [Keras] with [TensorFlow] backend.
+We have implemented [SRCNN], [FSRCNN] and [ESPCN] in [Keras] with [TensorFlow] backend. The network architectures are implemented in [models.py](toolbox/models.py) and [layers.py](toolbox/models.py). Our results are described in our [final report](https://github.com/qobilidop/srcnn/releases/download/final/final-report.pdf). The [experiments data](https://github.com/qobilidop/srcnn/releases/download/final/experiments-data.zip) used to get our results are also provided. To reduce the file size, weights files at each epoch are not included in the data file. But the final model file is included and there are enough data to reproduce all the plots in our final report.
 
 [SRCNN]: https://arxiv.org/abs/1501.00092
 [FSRCNN]: https://arxiv.org/abs/1608.00367
@@ -44,7 +44,7 @@ and you'll be in the `~/srcnn` directory and the `srcnn` conda environment, read
 
 ## Experiments
 
-An experiment is configured by a json file in the [experiments](experiments) directory. To run an experiment, `cd` into the [experiments](experiments) directory and do
+An experiment is configured by a json file in the [experiments](experiments) directory. To run an experiment, `cd` into the experiments directory and do
 
 ```bash
 python run.py {experiment-name}.json
