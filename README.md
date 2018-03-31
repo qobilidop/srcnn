@@ -1,3 +1,13 @@
+Beyond our expectation, this 2-week course project got some visitors. Although the project's quality is not to our satisfactory, all the authors have since moved on to other things, with no intention to perfect it. Thus we felt obliged to list some useful resources here for anyone who happen to find our page:
+
+- [huangzehao/Super-Resolution.Benckmark](https://github.com/huangzehao/Super-Resolution.Benckmark)
+- [IvoryCandy/super-resolution](https://github.com/IvoryCandy/super-resolution)
+- [YapengTian/Single-Image-Super-Resolution](https://github.com/YapengTian/Single-Image-Super-Resolution)
+
+There are surely much more resources than listed above, search `super resolution` on GitHub and you'll find them.
+
+What follows is the original README:
+
 # Convolutional Neural Networks for Single Image Super-Resolution
 
 We have implemented [SRCNN], [FSRCNN] and [ESPCN] in [Keras] with [TensorFlow] backend. The network architectures are implemented in [models.py](toolbox/models.py) and [layers.py](toolbox/layers.py). Our results are described in our [final report](https://github.com/qobilidop/srcnn/releases/download/final/final-report.pdf). The [experiments data](https://github.com/qobilidop/srcnn/releases/download/final/experiments-data.zip) used to get our results are also provided. To reduce the file size, weights files at each epoch are not included in the data file. But the final model file is included and there are enough data to reproduce all the plots in our final report.
