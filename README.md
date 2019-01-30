@@ -1,6 +1,6 @@
 #### Update on 2018-10-07
 
-Just find that fast.ai now has a fantastic [lecture on super resolution](http://course.fast.ai/lessons/lesson14.html). Check it out!
+Just find that fast.ai now has a fantastic [lecture on super resolution](http://course18.fast.ai/lessons/lesson14.html). Check it out!
 
 #### Update on 2018-03-30
 
