@@ -4,13 +4,12 @@ Just find that fast.ai now has a fantastic [lecture on super resolution](http://
 
 #### Update on 2018-03-30
 
-Beyond our expectation, this 2-week course project got some visitors. Although the project's quality is not to our satisfactory, all the authors have since moved on to other things, with no intention to improve it. Thus we felt obliged to list some useful resources here for anyone who stumbles on our page:
+This 2-week course project got more visitors than we expected. Although we have since moved on to other things, with no intention to improve this work, we felt obliged to list some useful resources here for whoever stumbles on this page:
 
 - [huangzehao/Super-Resolution.Benckmark](https://github.com/huangzehao/Super-Resolution.Benckmark)
 - [IvoryCandy/super-resolution](https://github.com/IvoryCandy/super-resolution)
+- [LoSealL/VideoSuperResolution](https://github.com/LoSealL/VideoSuperResolution)
 - [YapengTian/Single-Image-Super-Resolution](https://github.com/YapengTian/Single-Image-Super-Resolution)
-
-There are much more resources on this topic than listed above. One way to find them is to search `super resolution` on GitHub.
 
 What follows is the original README:
 
